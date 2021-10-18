@@ -6,10 +6,9 @@ import Restaurant from './components/Restaurant'
 import Restaurants from './components/Restaurant'
 
 class App extends Component {
-  state = {
-    data: null,
-    res: [],
-  };
+  public state: { res: typeof Restaurant[] } = { // or any[]
+      res: [],
+  }
 
   fetchUrl = async (url: string) => {
        const response: Response = await fetch(url, {
@@ -34,20 +33,24 @@ class App extends Component {
   }
 
   fetchRestaurants = async() => {
-    this.fetchUrl('http://localhost:4000/restaurants/').then((data) => {      
-      console.log(data)
-      return data
-      // this.setState({ res: data })
-    })
+    // this.fetchUrl('http://localhost:4000/restaurants/').then((data) => {
+    //   console.log(data)
+    //   return data
+    //   //this.setState({ res: data })
+    // })
+      return await this.fetchUrl('http://localhost:4000/restaurants/')
   }
 
   componentDidMount() {
-    this.fetchRestaurants()
+    this.fetchRestaurants().then(response => {
+        console.log("IN FETCHING", response)
+        this.setState({res: response})
+    })
   }
 
   render() {
     const restaurants = this.state.res?.map((rest, i) => (
-      <p>rest: {rest}, i: {i}</p>
+      <p>rest: rest.toString(), i: {i}</p>
     ))
     return (
         <div className="App">
@@ -59,10 +62,11 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to React</h1>
           </header>
-          <p className="App-intro">{this.state.data}</p>
-
+          {/*<p className="App-intro">{this.state.data}</p>*/}
           {restaurants}
+          <Restaurant restaurant={restaurants[0]}/>
         </div>
+
     );
   }
 }

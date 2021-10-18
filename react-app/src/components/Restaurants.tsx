@@ -6,6 +6,7 @@ type Props = {
 }
 
 const Restaurants: React.FC<Props> = ({ restaurants }) => {
+
     return (
         <div>
             {restaurants.map((restaurant, index) => (
