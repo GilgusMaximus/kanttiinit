@@ -1,5 +1,6 @@
 import React from 'react'
 import Restaurant from './Restaurant'
+import Stack from '@mui/material/Stack';
 
 type Props = {
     restaurants: any[]
@@ -9,9 +10,11 @@ const Restaurants: React.FC<Props> = ({ restaurants }) => {
 
     return (
         <div>
-            {restaurants.map((restaurant, index) => (
-                <Restaurant key={index} restaurant={restaurant} />
+            <Stack spacing={2}>
+            {restaurants.map((res) => (
+                <Restaurant restaurant={ res } />
             ))}
+            </Stack>
         </div>
     )
 }

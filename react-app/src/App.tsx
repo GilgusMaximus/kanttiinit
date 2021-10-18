@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar'
-import Restaurant from './components/Restaurant'
-import Restaurants from './components/Restaurant'
+import Restaurants from './components/Restaurants'
 
 class App extends Component {
-  public state: { res: typeof Restaurant[] } = { // or any[]
+  public state: { res: typeof Restaurants[] } = { // or any[]
       res: [],
   }
 
@@ -44,23 +43,18 @@ class App extends Component {
   }
 
   render() {
-    const restaurants = this.state.res?.map((rest, i) => (
-      <p>rest: {JSON.stringify(rest).toString()}, i: {i}</p>
-    ))
     return (
         <div className="App">
         <Navbar
-        
+
         />
 
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to React</h1>
           </header>
-          {/*<p className="App-intro">{this.state.data}</p>*/}
-          <Restaurants restaurant={restaurants}/>
-          {/*{restaurants}*/}
-          {/*<Restaurant restaurant={restaurants[0]}/>*/}
+
+          <Restaurants restaurants ={ this.state.res }/>
         </div>
 
     );
