@@ -33,11 +33,6 @@ class App extends Component {
   }
 
   fetchRestaurants = async() => {
-    // this.fetchUrl('http://localhost:4000/restaurants/').then((data) => {
-    //   console.log(data)
-    //   return data
-    //   //this.setState({ res: data })
-    // })
       return await this.fetchUrl('http://localhost:4000/restaurants/')
   }
 
@@ -50,7 +45,7 @@ class App extends Component {
 
   render() {
     const restaurants = this.state.res?.map((rest, i) => (
-      <p>rest: rest.toString(), i: {i}</p>
+      <p>rest: {JSON.stringify(rest).toString()}, i: {i}</p>
     ))
     return (
         <div className="App">
@@ -63,8 +58,9 @@ class App extends Component {
             <h1 className="App-title">Welcome to React</h1>
           </header>
           {/*<p className="App-intro">{this.state.data}</p>*/}
-          {restaurants}
-          <Restaurant restaurant={restaurants[0]}/>
+          <Restaurants restaurant={restaurants}/>
+          {/*{restaurants}*/}
+          {/*<Restaurant restaurant={restaurants[0]}/>*/}
         </div>
 
     );
