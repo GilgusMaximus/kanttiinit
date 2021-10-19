@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
 import Navbar from './components/Navbar'
 import Restaurants from './components/Restaurants'
+import RightDrawer from "./components/RightDrawer";
 
 class App extends Component {
   public state: { res: typeof Restaurants[] } = { // or any[]
@@ -45,10 +47,9 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-        <Navbar
+        <Navbar />
 
-        />
-
+            <RightDrawer meals={ this.state.res }/>
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to React</h1>
@@ -56,7 +57,6 @@ class App extends Component {
 
           <Restaurants restaurants ={ this.state.res }/>
         </div>
-
     );
   }
 }
