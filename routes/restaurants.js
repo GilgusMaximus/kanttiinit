@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 var mealRouter = require('./meals');
+var rratingRouter = require('./rratings');
 
 
 let restaurants = [
@@ -41,13 +42,18 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/:name", function (req, res, next) {
-    res.send("restaurant with name " + req.params.name);
+    res.send(restaurants[0])
 });
 
 router.use('/:name/meals/', function (req, res, next) {
     req.restaurant = req.params.name;
     next();
 }, mealRouter);
+
+router.use('/:name/ratings/', function (req, res, next) {
+    req.restaurant = req.params.name;
+    next();
+}, rratingRouter);
 
 // router.post("/:name", (req, res, next) => {
 router.post("/review/:name", (req, res, next) => {
