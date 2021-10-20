@@ -1,5 +1,6 @@
-import React from 'react'
+import * as React from 'react';
 import Requests from "../Requests";
+import Meals from "./Meals";
 
 type Props = {
     restaurant: any
@@ -7,6 +8,15 @@ type Props = {
 
 
 const Restaurant: React.FC<Props> = ({restaurant}) => {
+    const [state, setState] = React.useState({
+        meals: []
+    });
+
+
+    Requests.fetchMeals(restaurant.name).then(response => {
+        setState({meals: response})
+    });
+
 
     return (
         <div
@@ -16,9 +26,8 @@ const Restaurant: React.FC<Props> = ({restaurant}) => {
         >
             <h3>
                 Restaurant: <a href={restaurant.url}>{restaurant.name}</a> - {restaurant.pricing}/3
-                {/*{Requests.fetchMeals(restaurant.name).then(response => {*/}
-                {/*    console.log("Meals", response)*/}
-                {/*})}*/}
+                <Meals meals={state.meals}/>
+
             </h3>
         </div>
     )
