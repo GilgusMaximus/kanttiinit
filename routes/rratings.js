@@ -1,27 +1,27 @@
 var express = require("express");
 var router = express.Router();
+let db = require('../db/datastore')
 
 
 let ratings = [5, 4, 3, 5, 5, 4, 5]
 
 /* GET all restaurants */
 router.get("/", function (req, res, next) {
-    if (req.query.avg === 'true') {
-        avg = ratings.reduce((a, b) => a + b) / ratings.length;
-        console.log(avg)
-        res.send({
-            avg: avg,
-            count: ratings.length
-        })
-    }
-    res.send(ratings);
+    db.getRestaurantRatings(req.params.name).then(response => {
+        if (response !== undefined) {
+            res.send(response)
+        }
+    })
 });
 
 
 router.post('/', (req, res, next) => {
+    const rest = req.body.name;
     const rating = req.body.rating;
-    ratings.concat(rating)
-    console.log(ratings)
+
+    db.addRestaurantRating(rest, rating).then(r =>
+        console.log(r)
+    )
 });
 
 

@@ -26,16 +26,22 @@ getRestaurant = async (name) => {
 
 // we don't have ratings yet, so this wouldn't work yet
 getRestaurantRatings = async (name) => {
-    const query = datastore.ratings('ratings');
+    const query = datastore.createQuery('rrating');
     let [ratings] = await datastore.runQuery(query);
-    ratings = ratings.filter(x => x.restaurant === name);
+    for (let i = 0; i < ratings.length; i++) {
+        ratings[i] = ratings[i].rating
+    }
+    return ratings.map(x => x[0]);
+}
 
-    return ratings.reduce((a, b) => a.rating + b.rating) / ratings.length; // average
+addRestaurantRating = async (name, rating) => {
+    return 5
 }
 
 
 module.exports = {
     getAllRestaurants,
     getRestaurant,
-    getRestaurantRatings
+    getRestaurantRatings,
+    addRestaurantRating
 }
