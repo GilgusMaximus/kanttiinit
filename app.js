@@ -27,7 +27,7 @@ app.use(sassMiddleware({
   indentedSyntax: true, // true = .sass and false = .scss
   sourceMap: true
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'react-app/build')));
 
 app.use('/', indexRouter);
 app.use('/reviews', reviewsRouter);
@@ -55,6 +55,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(4000, () => console.log(`Listening on port 4000`));
+app.listen(8080, () => console.log(`Listening on port 8080`));
 
 module.exports = app;

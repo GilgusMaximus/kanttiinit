@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   fetchRestaurants = async() => {
-      return await this.fetchUrl('http://localhost:4000/restaurants/')
+      return await this.fetchUrl('http://localhost:8080/restaurants/')
   }
 
   componentDidMount() {
