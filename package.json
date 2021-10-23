@@ -6,6 +6,8 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "@google-cloud/datastore": "^6.6.0",
+    "@google-cloud/storage": "^5.15.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -13,6 +15,7 @@
     "morgan": "~1.9.1",
     "node-sass-middleware": "0.11.0",
     "nodemon": "^2.0.13",
+    "npm-force-resolutions": "^0.0.10",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {

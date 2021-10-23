@@ -4,6 +4,7 @@ var router = express.Router();
 var mealRouter = require('./meals');
 var rratingRouter = require('./rratings');
 
+const db = require('../db/datastore');
 
 let restaurants = [
     {
@@ -38,6 +39,7 @@ let restaurants = [
 
 /* GET all restaurants */
 router.get("/", function (req, res, next) {
+    db.getAllRestaurants()
     res.send(restaurants);
 });
 
