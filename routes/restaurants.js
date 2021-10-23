@@ -6,45 +6,17 @@ var rratingRouter = require('./rratings');
 
 const db = require('../db/datastore');
 
-let restaurants = [
-    {
-        id: 0,
-        name: "dipoli",
-        location: "aaaaaa",
-        pricing: 1,
-        url: "dipoli.com",
-    },
-    {
-        id: 1,
-        name: "abloc",
-        location: "bbbbbbb",
-        pricing: 1,
-        url: "abloc.com",
-    },
-    {
-        id: 2,
-        name: "täffä",
-        location: "cccc",
-        pricing: 1,
-        url: "taffa.com",
-    },
-    {
-        id: 3,
-        name: "Computer Science Building",
-        location: "dddd",
-        pricing: 1,
-        url: "csbuilding.com",
-    },
-];
-
 /* GET all restaurants */
 router.get("/", function (req, res, next) {
-    db.getAllRestaurants()
-    res.send(restaurants);
+    db.getAllRestaurants().then(response => {
+        res.send(response)
+    });
 });
 
 router.get("/:name", function (req, res, next) {
-    res.send(restaurants[0])
+    db.getRestaurant(req.params.name).then(response => {
+        res.send(response)
+    })
 });
 
 router.use('/:name/meals/', function (req, res, next) {
@@ -57,7 +29,6 @@ router.use('/:name/ratings/', function (req, res, next) {
     next();
 }, rratingRouter);
 
-// router.post("/:name", (req, res, next) => {
 router.post("/review/:name", (req, res, next) => {
     const rating = req.body.review.rating;
     const rest = req.params.name;
