@@ -13,8 +13,8 @@ const Meals: React.FC<Props> = ({ meals }) => {
             <Stack direction="row" spacing={2}
                    divider={<Divider orientation="vertical" flexItem/>}
             >
-                {meals.map((m) => (
-                    <Meal meal={m}/>
+                {meals.map((m, index) => (
+                    <Meal key={index} meal={m}/>
                 ))}
             </Stack>
         </div>

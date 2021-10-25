@@ -1,5 +1,3 @@
-import React, {Component} from 'react'
-
 class Requests {
     static fetchUrl = async (url: string) => {
         const response: Response = await fetch(url, {
