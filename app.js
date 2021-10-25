@@ -6,9 +6,16 @@ var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 var cors = require('cors')
 
+const getFazerRestaurantData = require('./utils/fazerScraper');
+const getSodexoRestaurantData = require('./utils/sodexoScraper');
+
+getFazerRestaurantData('abloc', 'en');
+getSodexoRestaurantData('arvo', 'en');
+
 var indexRouter = require('./routes/index');
 var reviewsRouter = require('./routes/reviews');
 var restaurantRouter = require('./routes/restaurants');
+
 
 var app = express();
 
