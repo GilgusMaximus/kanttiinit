@@ -14,11 +14,6 @@ getAllRestaurants = async () => {
 }
 
 getRestaurant = async (name) => {
-    // If we index fields:
-    // const query = datastore.createQuery('restaurants').filter('name', '=', 'Mau-kas')
-    // const [rests] = await datastore.runQuery(query);
-    // return rests
-
     const query = datastore.createQuery('restaurants');
     const [rests] = await datastore.runQuery(query);
     return rests.find(x => x.name.toLowerCase() === name.toLowerCase());
@@ -26,16 +21,31 @@ getRestaurant = async (name) => {
 
 // we don't have ratings yet, so this wouldn't work yet
 getRestaurantRatings = async (name) => {
-    const query = datastore.createQuery('rrating');
+    const query = datastore.createQuery('restaurants');
     let [ratings] = await datastore.runQuery(query);
-    for (let i = 0; i < ratings.length; i++) {
-        ratings[i] = ratings[i].rating
-    }
-    return ratings.map(x => x[0]);
+    let rating = ratings.find(x => x.name.toLowerCase() === name.toLowerCase()) // only get specific restaurant
+
+    return rating.rating
 }
 
 addRestaurantRating = async (name, rating) => {
-    return 5
+    if (rating < 1 || rating > 5) {
+        return -1
+    }
+    const query = datastore.createQuery('restaurants');
+    let [ratings] = await datastore.runQuery(query);
+    let rat = ratings.find(x => x.name.toLowerCase() === name.toLowerCase()) // only get specific restaurant
+    console.log(rat.key)
+
+    return rating
+}
+
+getMeal = async (restaurant, meal) => {
+
+}
+
+addMealRating = async (restaurant, meal, rating) => {
+
 }
 
 
@@ -43,5 +53,25 @@ module.exports = {
     getAllRestaurants,
     getRestaurant,
     getRestaurantRatings,
-    addRestaurantRating
+    addRestaurantRating,
+    addMealRating,
+    getMeal
 }
+
+
+/*
+ * Datastore does not support images. Instead use cloud store and have a url field in meal entity?
+ *
+ * rrating array vs. rrating entities?
+     * Could we also put the restaurant reviews in the restaurant entity?
+         *  or would that be too big? (creator, date, rating)
+
+ * shall we create restaurant IDs?
+ *
+ *
+ * how do we create meal ids?
+ *
+ *
+ *
+ * Menu Parser is high priority, s.t. we get some data to work with. When shall we work on that?
+ */
