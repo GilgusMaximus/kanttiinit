@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from "react";
 import Requests from "../Requests";
 import Meals from "./Meals";
 
@@ -12,11 +13,11 @@ const Restaurant: React.FC<Props> = ({restaurant}) => {
         meals: []
     });
 
-
-    Requests.fetchMeals(restaurant.name).then(response => {
-        setState({meals: response})
-    });
-
+    useEffect(() => {
+        Requests.fetchMeals(restaurant.name).then(response => {
+            setState({meals: response})
+        });
+    }, [restaurant.name])
 
     return (
         <div

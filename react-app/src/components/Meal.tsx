@@ -20,7 +20,7 @@ const Meal: React.FC<Props> = ({meal}) => {
 
             <p>
                 {meal.diets.map((m: string, i: number, arr: []) => (
-                    <span>{m}{i != (arr.length -1) ?  ', ' : ''}</span>
+                    <span>{m}{i !== (arr.length -1) ?  ', ' : ''}</span>
                 ))}
             </p>
 
