@@ -28,9 +28,9 @@ getRestaurantRatings = async (name) => {
     return rating.rating
 }
 
-addRestaurantRating = async (creator, rest, rating) => {
+addRestaurantRating = async (creator, rest, ratingNumber) => {
     // TODO: check that name wasn't already added
-    if (rating < 1 || rating > 5) {
+    if (ratingNumber < 1 || ratingNumber > 5) {
         return -1
     }
     const query = datastore.createQuery('restaurants');
@@ -39,21 +39,74 @@ addRestaurantRating = async (creator, rest, rating) => {
     let key = rat[datastore.KEY]
     rat.rating.push(
         {
-            "rating": rating,
+            "rating": ratingNumber,
             "creatorId": creator,
             "timestamp": Date.now(),
         }
     )
     await datastore.update({key: key, data: rat})
-    return rating
+    return ratingNumber
 }
 
-getMeal = async (restaurant, meal) => {
-
+getAllMealsRestaurant = async (restaurant) => {
+    const query = datastore.createQuery('meals');
+    let [meals] = await datastore.runQuery(query);
+    return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
-addMealRating = async (restaurant, meal, rating) => {
+// should check if meal exists
+getMealExisting = async (restaurant, mealName) => {
+    return undefined
+}
 
+createMeal = async (restaurant, mealName, allergies) => {
+    // TODO: check if meal exists first
+    console.log(restaurant)
+
+    const key = datastore.key('meals');
+    const meal = {
+        'name': mealName,
+        'restaurant': restaurant,
+        'allergies': allergies,
+        'rating': [],
+    }
+
+    datastore.insert({key: key, data: meal}).then(() => {
+        // Meal inserted successfully.
+    })
+}
+
+
+/* Copied code over from add restaurant rating. First finalize that method, before working on this one */
+addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
+    // // TODO: check that name wasn't already added
+    // if (ratingNumber < 1 || ratingNumber > 5) {
+    //     return -1
+    // }
+    // const query = datastore.createQuery('meals');
+    // let [meals] = await datastore.runQuery(query);
+    // let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+    // let key = meal[datastore.KEY]
+    // meal.rating.push(
+    //     {
+    //         "rating": ratingNumber,
+    //         "creatorId": creator,
+    //         "timestamp": Date.now(),
+    //     }
+    // )
+    // await datastore.update({key: key, data: meal})
+    // return ratingNumber
+}
+
+addMealImage = async (restaurant, mealName, url) => {
+    const query = datastore.createQuery('meals');
+    let [meals] = await datastore.runQuery(query);
+    let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+    let key = meal[datastore.KEY]
+    meal.url = url
+
+    await datastore.update({key: key, data: meal})
+    return url
 }
 
 
@@ -63,7 +116,10 @@ module.exports = {
     getRestaurantRatings,
     addRestaurantRating,
     addMealRating,
-    getMeal
+    addMealImage,
+    getMealExisting,
+    createMeal,
+    getAllMealsRestaurant
 }
 
 

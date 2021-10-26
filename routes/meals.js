@@ -6,7 +6,12 @@ var storage = require('../db/storage')
 
 /* GET all meals from restaurant for today? */
 router.get("/", function (req, res, next) {
-    res.send(req.restaurant);
+    const restaurant = req.restaurant;
+
+    db.getAllMealsRestaurant(restaurant).then((r) => {
+        res.send(r)
+    })
+
 });
 
 /**
@@ -14,10 +19,10 @@ router.get("/", function (req, res, next) {
  */
 
 router.get("/:meal/", function (req, res, next) {
-    const restaurant = req.body.name;
+    const restaurant = req.restaurant;
     const meal = req.params.meal;
 
-    db.getMeal(restaurant, meal).then(r => {
+    db.getMealExisting(restaurant, meal).then(r => {
         res.send(r)
     })
 })
@@ -27,7 +32,7 @@ router.post("/:meal/review/", function (req, res, next) {
     const meal = req.params.meal;
     const rating = req.body.rating;
 
-    db.addMealRating(restaurant, meal, rating).then(r => {
+    db.addMealRating("admin", restaurant, meal, rating).then(r => {
         res.send(r)
     })
 });
