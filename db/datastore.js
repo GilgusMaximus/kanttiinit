@@ -28,15 +28,23 @@ getRestaurantRatings = async (name) => {
     return rating.rating
 }
 
-addRestaurantRating = async (name, rating) => {
+addRestaurantRating = async (creator, rest, rating) => {
+    // TODO: check that name wasn't already added
     if (rating < 1 || rating > 5) {
         return -1
     }
     const query = datastore.createQuery('restaurants');
     let [ratings] = await datastore.runQuery(query);
-    let rat = ratings.find(x => x.name.toLowerCase() === name.toLowerCase()) // only get specific restaurant
-    console.log(rat.key)
-
+    let rat = ratings.find(x => x.name.toLowerCase() === rest.toLowerCase())
+    let key = rat[datastore.KEY]
+    rat.rating.push(
+        {
+            "rating": rating,
+            "creatorId": creator,
+            "timestamp": Date.now(),
+        }
+    )
+    await datastore.update({key: key, data: rat})
     return rating
 }
 
@@ -66,8 +74,6 @@ module.exports = {
      * Could we also put the restaurant reviews in the restaurant entity?
          *  or would that be too big? (creator, date, rating)
 
- * shall we create restaurant IDs?
- *
  *
  * how do we create meal ids?
  *

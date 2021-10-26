@@ -16,11 +16,10 @@ router.post('/', (req, res, next) => {
     const rest = req.restaurant
     const rating = req.body.rating;
 
-    db.addRestaurantRating(rest, rating).then(r => {
+    db.addRestaurantRating("admin", rest, rating).then(r => {
         if (r === -1) {
             return res.sendStatus(400)
         }
-
 
         return res.sendStatus(200)
     })
