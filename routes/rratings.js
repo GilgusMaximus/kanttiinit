@@ -20,7 +20,6 @@ router.post('/', (req, res, next) => {
         if (r === -1) {
             return res.sendStatus(400)
         }
-
         return res.sendStatus(200)
     })
 });
