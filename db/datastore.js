@@ -56,7 +56,9 @@ getAllMealsRestaurant = async (restaurant) => {
 
 // should check if meal exists
 getMealExisting = async (restaurant, mealName) => {
-    return undefined
+    const query = datastore.createQuery('meals');
+    let [meals] = await datastore.runQuery(query);
+    return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase()).find(x => x.name.toLowerCase() === mealName.toLowerCase())
 }
 
 createMeal = async (restaurant, mealName, allergies) => {
@@ -69,6 +71,7 @@ createMeal = async (restaurant, mealName, allergies) => {
         'restaurant': restaurant,
         'allergies': allergies,
         'rating': [],
+        'url': [],
     }
 
     datastore.insert({key: key, data: meal}).then(() => {
@@ -103,7 +106,7 @@ addMealImage = async (restaurant, mealName, url) => {
     let [meals] = await datastore.runQuery(query);
     let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
     let key = meal[datastore.KEY]
-    meal.url = url
+    meal.url.push(url)
 
     await datastore.update({key: key, data: meal})
     return url

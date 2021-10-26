@@ -31,7 +31,7 @@ function uploadImage(req, res, next) {
         return next();
     }
 
-    const gcsname = Date.now() + req.file.originalname;
+    const gcsname = `${Date.now()}-${req.params.meal}`;
     const file = bucket.file(gcsname);
 
     const stream = file.createWriteStream({

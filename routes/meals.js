@@ -11,7 +11,6 @@ router.get("/", function (req, res, next) {
     db.getAllMealsRestaurant(restaurant).then((r) => {
         res.send(r)
     })
-
 });
 
 /**
@@ -51,8 +50,9 @@ router.post("/:meal/image/", storage.multer.single('file'), function (req, res, 
     const url = req.file.cloudStoragePublicUrl;
 
 
-    db.addMealImage(restaurant, meal, url)
-    return res.sendStatus(200)
+    db.addMealImage(restaurant, meal, url).then(r => {
+        return res.sendStatus(200)
+    })
 });
 
 // TODO: update error middleware
