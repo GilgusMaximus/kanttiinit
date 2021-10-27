@@ -6,22 +6,25 @@ const {Datastore} = require('@google-cloud/datastore');
 
 // Creates a client
 const datastore = new Datastore();
+const mealArchiveKind = 'meals';
+const mealWeeklyKind = 'meals-weekly'
+const restKind = 'restaurants'
 
 getAllRestaurants = async () => {
-    const query = datastore.createQuery('restaurants');
+    const query = datastore.createQuery(restKind);
     const [rests] = await datastore.runQuery(query);
     return rests
 }
 
 getRestaurant = async (name) => {
-    const query = datastore.createQuery('restaurants');
+    const query = datastore.createQuery(restKind);
     const [rests] = await datastore.runQuery(query);
     return rests.find(x => x.name.toLowerCase() === name.toLowerCase());
 }
 
 // we don't have ratings yet, so this wouldn't work yet
 getRestaurantRatings = async (name) => {
-    const query = datastore.createQuery('restaurants');
+    const query = datastore.createQuery(restKind);
     let [ratings] = await datastore.runQuery(query);
     let rating = ratings.find(x => x.name.toLowerCase() === name.toLowerCase()) // only get specific restaurant
 
@@ -33,7 +36,7 @@ addRestaurantRating = async (creator, rest, ratingNumber) => {
     if (ratingNumber < 1 || ratingNumber > 5) {
         return -1
     }
-    const query = datastore.createQuery('restaurants');
+    const query = datastore.createQuery(restKind);
     let [ratings] = await datastore.runQuery(query);
     let rat = ratings.find(x => x.name.toLowerCase() === rest.toLowerCase())
     let key = rat[datastore.KEY]
@@ -49,23 +52,44 @@ addRestaurantRating = async (creator, rest, ratingNumber) => {
 }
 
 getAllMealsRestaurant = async (restaurant) => {
-    const query = datastore.createQuery('meals');
+    const query = datastore.createQuery(mealArchiveKind);
     let [meals] = await datastore.runQuery(query);
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
-// should check if meal exists
+// returns either meal if existing or undefined if not existing
 getMealExisting = async (restaurant, mealName) => {
-    const query = datastore.createQuery('meals');
+    const query = datastore.createQuery(mealArchiveKind);
     let [meals] = await datastore.runQuery(query);
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase()).find(x => x.name.toLowerCase() === mealName.toLowerCase())
 }
 
+
+copyMealWeekly = async (mealEntity) => {
+    const key = datastore.key(mealWeeklyKind)
+    const meal = {
+        'name': mealEntity.name,
+        'restaurant': mealEntity.restaurant,
+        'allergies': mealEntity.allergies,
+        'rating': mealEntity.rating,
+        'url': mealEntity.url,
+        'date': mealEntity.date,
+    }
+
+    datastore.insert({key: key, data: meal}).then(r => {
+        // inserted successfully
+    })
+}
+
+
+copyMealsWeekly = async (mealEntities) => {
+}
+
+
+// used for scraper
 createMeal = async (restaurant, mealName, allergies) => {
     // TODO: check if meal exists first
-    console.log(restaurant)
-
-    const key = datastore.key('meals');
+    const key = datastore.key(mealArchiveKind);
     const meal = {
         'name': mealName,
         'restaurant': restaurant,
@@ -102,7 +126,7 @@ addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
 }
 
 addMealImage = async (restaurant, mealName, url) => {
-    const query = datastore.createQuery('meals');
+    const query = datastore.createQuery(mealArchiveKind);
     let [meals] = await datastore.runQuery(query);
     let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
     let key = meal[datastore.KEY]
@@ -122,7 +146,8 @@ module.exports = {
     addMealImage,
     getMealExisting,
     createMeal,
-    getAllMealsRestaurant
+    getAllMealsRestaurant,
+    copyMealWeekly,
 }
 
 
