@@ -4,34 +4,32 @@
 // https://googlecloudplatform.github.io/google-cloud-node/#/docs/datastore/latest/guides/authentication
 const {Datastore} = require('@google-cloud/datastore');
 
-// Creates a client
 const datastore = new Datastore();
+
 const mealArchiveKind = 'meals';
 const mealWeeklyKind = 'meals-weekly'
 const restKind = 'restaurants'
 
-getAllRestaurants = async () => {
+const getAllRestaurants = async () => {
     const query = datastore.createQuery(restKind);
     const [rests] = await datastore.runQuery(query);
     return rests
 }
 
-getRestaurant = async (name) => {
-    const query = datastore.createQuery(restKind);
-    const [rests] = await datastore.runQuery(query);
-    return rests.find(x => x.name.toLowerCase() === name.toLowerCase());
+const getRestaurant = async (name) => {
+    return await getAllRestaurants().then(rests => {
+        return rests.find(x => x.name.toLowerCase() === name.toLowerCase());
+    })
 }
 
 // we don't have ratings yet, so this wouldn't work yet
-getRestaurantRatings = async (name) => {
-    const query = datastore.createQuery(restKind);
-    let [ratings] = await datastore.runQuery(query);
-    let rating = ratings.find(x => x.name.toLowerCase() === name.toLowerCase()) // only get specific restaurant
-
-    return rating.rating
+const getRestaurantRatings = async (name) => {
+    return await getRestaurant(name).then(rest => {
+        return rest.rating
+    })
 }
 
-addRestaurantRating = async (creator, rest, ratingNumber) => {
+const addRestaurantRating = async (creator, rest, ratingNumber) => {
     // TODO: check that name wasn't already added
     if (ratingNumber < 1 || ratingNumber > 5) {
         return -1
@@ -51,21 +49,21 @@ addRestaurantRating = async (creator, rest, ratingNumber) => {
     return ratingNumber
 }
 
-getAllMealsRestaurant = async (restaurant) => {
+const getAllMealsRestaurant = async (restaurant) => {
     const query = datastore.createQuery(mealArchiveKind);
     let [meals] = await datastore.runQuery(query);
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
 // returns either meal if existing or undefined if not existing
-getMealExisting = async (restaurant, mealName) => {
-    const query = datastore.createQuery(mealArchiveKind);
-    let [meals] = await datastore.runQuery(query);
-    return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase()).find(x => x.name.toLowerCase() === mealName.toLowerCase())
+const getMealExisting = async (restaurant, mealName) => {
+    return await getAllMealsRestaurant(restaurant).then(meals => {
+        return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+    })
 }
 
 
-copyMealWeekly = async (mealEntity) => {
+const copyMealWeekly = async (mealEntity) => {
     const key = datastore.key(mealWeeklyKind)
     const meal = {
         'name': mealEntity.name,
@@ -82,12 +80,20 @@ copyMealWeekly = async (mealEntity) => {
 }
 
 
-copyMealsWeekly = async (mealEntities) => {
+const copyMealsWeekly = async (mealEntities) => {
 }
 
 
 // used for scraper
-createMeal = async (restaurant, mealName, allergies) => {
+const createMeal = async (restaurant, mealName, allergies) => {
+    let m = await getMealExisting(restaurant, mealName).then(r => {
+        return r
+    })
+
+    if (m) { // meal already exists
+        return m
+    }
+
     // TODO: check if meal exists first
     const key = datastore.key(mealArchiveKind);
     const meal = {
@@ -105,7 +111,7 @@ createMeal = async (restaurant, mealName, allergies) => {
 
 
 /* Copied code over from add restaurant rating. First finalize that method, before working on this one */
-addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
+const addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
     // // TODO: check that name wasn't already added
     // if (ratingNumber < 1 || ratingNumber > 5) {
     //     return -1
@@ -125,8 +131,9 @@ addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
     // return ratingNumber
 }
 
-addMealImage = async (restaurant, mealName, url) => {
-    const query = datastore.createQuery(mealArchiveKind);
+//TODO: add to both meal kind and meal archive kind
+const addMealImage = async (restaurant, mealName, url, kind = mealArchiveKind) => {
+    const query = datastore.createQuery(kind);
     let [meals] = await datastore.runQuery(query);
     let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
     let key = meal[datastore.KEY]
