@@ -14,7 +14,7 @@ async function getRestaurantData(language) {
     // clean up as the regex result itself is not valid HTML
     data = data.substr(0, data.length-15)
     // TODO take care of language
-    data = extractDataFromHTML(htmlParser.parseDocument(data))
+    return mapDataToStandard(extractDataFromHTML(htmlParser.parseDocument(data)), language)
     return data
 }
 
@@ -39,5 +39,39 @@ function extractDataFromHTML(htmlParsed) {
         }
     }
     return mealDays;
+}
+
+function mapDataToStandard(restaurantData, language) {
+    const currentDate = new Date();
+    const data = restaurantData.map((element, index) => {
+        const dayMeals = {
+            day: element.day.split('\n')[1].trim(),
+            date: new Date(currentDate.setDate(currentDate.getDate()+(index-currentDate.getDay()+1))),
+            menu: []
+        }
+        element.meals.forEach((mealElement, index) => {
+            const mealSplit = mealElement.split('/')
+            if(mealSplit.length === 1) {
+                const dietSplit = (mealSplit.length > 1) ? mealSplit[1].split(' ' ) : mealSplit[0].split(' ')
+                dayMeals.menu.push(
+                    {
+                        Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length).join(' '),
+                        Diets: [dietSplit.splice(dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length)]
+                    }
+                )
+                return
+            }
+            const dietSplit = (mealSplit.length > 1) ? mealSplit[1].split(' ' ) : mealSplit[0].split(' ')
+            const name = (language === 'fi') ? mealSplit[0].split(' ') : dietSplit.splice(0, dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length)
+            dayMeals.menu.push(
+                {
+                    Name: name.join(' '),
+                    Diets: [dietSplit.splice(dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length)]
+                }
+            )
+        })
+        return dayMeals
+    })
+    return data
 }
 module.exports = getRestaurantData;

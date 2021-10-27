@@ -7,6 +7,7 @@ https://about.teknologforeningen.fi/index.php/fi/teekkariravintola
 
 const makeHTTPSRequest = require('./httpRequester');
 const htmlParser = require('htmlparser2');
+const { createDateFromDotDate } = require('./utils')
 const restaurantUrlEn = "https://about.teknologforeningen.fi/index.php/en/lunch-restaurant";
 const restaurantUrlFi = "https://about.teknologforeningen.fi/index.php/fi/teekkariravintola";
 
@@ -49,7 +50,7 @@ function mapDataToStandard(restaurantData) {
         const dayDate = element.date.split(' ')
         const dayMeals = {
             day: dayDate[0],
-            date: dayDate[1],
+            date: createDateFromDotDate(dayDate[1]),
             menu: []
         }
         element.meals.forEach((mealElement, mealIndex) => {
