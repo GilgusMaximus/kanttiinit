@@ -8,9 +8,13 @@ var cors = require('cors')
 
 const getFazerRestaurantData = require('./utils/fazerScraper');
 const getSodexoRestaurantData = require('./utils/sodexoScraper');
+const getTaffaRestaurantData = require('./utils/taffa');
+const getMaukasRestaurantData = require('./utils/maukas');
 
-getFazerRestaurantData('abloc', 'en');
-getSodexoRestaurantData('arvo', 'en');
+const a =  getFazerRestaurantData('abloc', 'en');
+const d =  getSodexoRestaurantData('arvo', 'en');
+const b=  getTaffaRestaurantData('fi');
+const c =  getMaukasRestaurantData('fi')
 
 var indexRouter = require('./routes/index');
 var reviewsRouter = require('./routes/reviews');

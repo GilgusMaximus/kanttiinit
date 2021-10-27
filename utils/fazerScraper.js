@@ -3,7 +3,7 @@ Scraper for all the Fazer owned restaurants, as the JSON data can be accessed di
  */
 
 const makeHTTPSRequest = require('./httpRequester')
-
+const {createDateFromDotDate} = require('./utils')
 const restaurantURL = "https://www.foodandco.fi/api/restaurant/menu/week?language=fi&restaurantPageId=$&weekDate=%"
 
 const nameIdDict = {
@@ -19,7 +19,16 @@ async function getRestaurantData(name, language) {
     console.log("The date is;", currentDate);
     const url = `https://www.foodandco.fi/api/restaurant/menu/week?language=${language}&restaurantPageId=${restaurantId}&weekDate=${currentDate}`;
     const data = await makeHTTPSRequest(url);
-    return data;
+    const weekMeals = data.data.LunchMenus.map((element, index) => {
+        // required to get the date into the JS native date format, which allows easier processing
+
+        return {
+            day: element["DayOfWeek"],
+            date: createDateFromDotDate(element["Date"]),
+            menu: element["SetMenus"]
+        }
+    });
+    return weekMeals;
 }
 
 module.exports = getRestaurantData;

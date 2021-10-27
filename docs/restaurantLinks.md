@@ -20,7 +20,7 @@ Kvarkki (Scrape)
 https://www.sodexo.fi/ravintolat/ravintola-aalto-kvarkki
 ---
 Maukas (Scrape)
-https://www.mau-kas.fi/ravintola.html
+https://www.mau-kas.fi/ravintola.html?listtype=lunch&ci=0&showall=true
 ---
 Studio Kipsari?
 ---
@@ -32,3 +32,4 @@ https://www.sodexo.fi/ravintolat/ravintola-aalto-tietotekniikantalo
 ---
 Täffä (Scrape)
 https://about.teknologforeningen.fi/index.php/en/lunch-restaurant
+https://about.teknologforeningen.fi/index.php/fi/teekkariravintola
