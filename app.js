@@ -13,7 +13,7 @@ const getMaukasRestaurantData = require('./utils/maukas');
 
 const a =  getFazerRestaurantData('abloc', 'en');
 const d =  getSodexoRestaurantData('arvo', 'en');
-const b=  getTaffaRestaurantData('fi');
+const b=  getTaffaRestaurantData('en');
 const c =  getMaukasRestaurantData('fi')
 
 var indexRouter = require('./routes/index');

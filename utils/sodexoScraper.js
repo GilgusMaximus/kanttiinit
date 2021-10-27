@@ -17,11 +17,13 @@ const nameIdDict = {
 
 async function getRestaurantData(name, language) {
     const restaurantId = nameIdDict[name];
-    // TODO decide whether we want to go with the weekly or daily menus?
     const url = `${restaurantUrlWeekly}${restaurantId}`;
-    const data = await makeHTTPSRequest(url);
-    const weekStart = createDateFromDotDate(data.data.timeperiod.split('-')[0].trim()+"2021");
-    const weekMelas = data.data.mealdates.map((element, index) => {
+    return mapDataToStandard(await makeHTTPSRequest(url), language);
+}
+
+function mapDataToStandard(restaurantData, language) {
+    const weekStart = createDateFromDotDate(restaurantData.data.timeperiod.split('-')[0].trim()+"2021");
+    return restaurantData.data.mealdates.map((element, index) => {
         const data = {
             day: element.date,
             date: new Date(weekStart.getDate()+index),
@@ -43,7 +45,6 @@ async function getRestaurantData(name, language) {
         })
         return data
     })
-    return weekMelas;
 }
 
 module.exports = getRestaurantData;
