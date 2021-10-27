@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 
+router.use(errorHandler)
+
 var db = require('../db/datastore')
 var storage = require('../db/storage')
 
@@ -22,6 +24,11 @@ router.get("/:meal/", function (req, res, next) {
     const meal = req.params.meal;
 
     db.getMealExisting(restaurant, meal).then(r => {
+        if (!r) {
+            let err = new Error("Meal couldn't be found.")
+            err.code = 400;
+            return next(err)
+        }
         res.send(r)
     })
 })
@@ -32,6 +39,11 @@ router.post("/:meal/review/", function (req, res, next) {
     const rating = req.body.rating;
 
     db.addMealRating("admin", restaurant, meal, rating).then(r => {
+        if (!r) {
+            let err = new Error("Meal couldn't be found.")
+            err.code = 400;
+            return next(err)
+        }
         res.send(r)
     })
 });
@@ -51,14 +63,20 @@ router.post("/:meal/image/", storage.multer.single('file'), function (req, res, 
 
 
     db.addMealImage(restaurant, meal, url).then(r => {
+        if (!r) {
+            let err = new Error("There was a problem with the image upload.")
+            err.code = 400;
+            return next(err)
+        }
         return res.sendStatus(200)
     })
 });
 
-// TODO: update error middleware
-router.use("/:meal/image/", function (err, req, res, next) {
-    console.log("Image was invalid or not provided")
-    res.status(err.status || 500).send(err.message)
-})
+function errorHandler(err, req, res, next) {
+    let code = err.code;
+    let message = err.message;
+    res.writeHead(code, message, {'content-type': 'text/plain'});
+    res.end(message);
+}
 
 module.exports = router;

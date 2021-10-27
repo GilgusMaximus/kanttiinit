@@ -149,19 +149,3 @@ module.exports = {
     getAllMealsRestaurant,
     copyMealWeekly,
 }
-
-
-/*
- * Datastore does not support images. Instead use cloud store and have a url field in meal entity?
- *
- * rrating array vs. rrating entities?
-     * Could we also put the restaurant reviews in the restaurant entity?
-         *  or would that be too big? (creator, date, rating)
-
- *
- * how do we create meal ids?
- *
- *
- *
- * Menu Parser is high priority, s.t. we get some data to work with. When shall we work on that?
- */
