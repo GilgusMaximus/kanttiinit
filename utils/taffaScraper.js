@@ -68,6 +68,9 @@ function mapDataToStandard(restaurantData, language) {
         })
         return dayMeals
     })
+
+    // required to make the array 7 days long and cover saturday and sunday as well
+    // -> makes upstream work easier as there will be no need to distinguish between the restaurants1
     for(let i = 0; i < mealWeek.length; i++) {
         console.log(mealWeek[i].date.getDay())
         if(mealWeek[i].date.getDay() === 5) {
