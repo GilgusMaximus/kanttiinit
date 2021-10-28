@@ -10,6 +10,9 @@ const {createDateFromDotDate} = require('./utils')
 const restaurantUrlEn = "https://about.teknologforeningen.fi/index.php/en/lunch-restaurant";
 const restaurantUrlFi = "https://about.teknologforeningen.fi/index.php/fi/teekkariravintola";
 
+const noFoodAvailableEn = "Closed"
+const noFoodAvailableFi = "Suljettu"
+
 async function getRestaurantData(language) {
     const url = (language === 'fi') ? restaurantUrlFi : restaurantUrlEn;
     const htmlData = await makeHTTPSRequest(url);
@@ -17,7 +20,7 @@ async function getRestaurantData(language) {
     const matchedHtml = htmlData.data.match(/<div class=\"small-12 medium-3 large-3 small-order-3 medium-order-3 column(.)*<!-- Footer -->/s)[0];
     // Cleanup as the regex does not produce valid HTML for the parser
     const validHtmlMatch = matchedHtml.substr(0, matchedHtml.length - 31);
-    return mapDataToStandard(extractDataFromHtml(htmlParser.parseDocument(validHtmlMatch).children[0]));
+    return mapDataToStandard(extractDataFromHtml(htmlParser.parseDocument(validHtmlMatch).children[0]), language);
 }
 
 
@@ -43,8 +46,8 @@ function extractDataFromHtml(htmlData) {
     return dayMeals;
 }
 
-function mapDataToStandard(restaurantData) {
-    return restaurantData.map((element, index) => {
+function mapDataToStandard(restaurantData, language) {
+    const mealWeek = restaurantData.map((element, index) => {
         const dayDate = element.date.split(' ')
         const dayMeals = {
             day: dayDate[0],
@@ -65,6 +68,38 @@ function mapDataToStandard(restaurantData) {
         })
         return dayMeals
     })
+    for(let i = 0; i < mealWeek.length; i++) {
+        console.log(mealWeek[i].date.getDay())
+        if(mealWeek[i].date.getDay() === 5) {
+            const currentDate = new Date();
+            const saturday = {
+                day: (language === 'fi') ? 'Lauantai' : 'Saturday',
+                date: new Date(currentDate.setDate(mealWeek[i].date.getDate()+1)),
+                menu: [
+                    {
+                        Name: (language === 'fi') ? noFoodAvailableFi : noFoodAvailableEn,
+                        Price: "",
+                        Meals: []
+                    }
+                ]
+            }
+            const sunday = {
+                day: (language === 'fi') ? 'Sunnuntai' : 'Sunday',
+                date: new Date(currentDate.setDate(mealWeek[i].date.getDate()+2)),
+                menu: [
+                    {
+                        Name: (language === 'fi') ? noFoodAvailableFi : noFoodAvailableEn,
+                        Price: "",
+                        Meals: []
+                    }
+                ]
+            }
+            mealWeek.splice(i+1, 0, saturday)
+            mealWeek.splice(i+2, 0, sunday)
+            break
+        }
+    }
+    return mealWeek
 }
 
 module.exports = getRestaurantData;

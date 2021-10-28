@@ -54,7 +54,7 @@ function mapDataToStandard(restaurantData, language) {
                 dayMeals.menu.push(
                     {
                         Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length).join(' '),
-                        Price: -1,
+                        Price: "",
                         Meals: [
                             {
                                 Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length).join(' '),
@@ -70,7 +70,11 @@ function mapDataToStandard(restaurantData, language) {
             dayMeals.menu.push(
                 {
                     Name: name.join(' '),
-                    Diets: [dietSplit.splice(dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length)]
+                    Price: -1,
+                    menu: [{
+                        Name: name.join(' '),
+                        Diets: [dietSplit.splice(dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length)]
+                    }]
                 }
             )
         })

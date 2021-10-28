@@ -26,11 +26,12 @@ scrapeAllData = () => {
     })
 
     // go through each restaurant done later. for now only work with one restaurant
-    maukas('en').then(response => {
+    taffa('en').then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
             day.menu.forEach((meal) => {
                 console.log(meal)
+                // TODO : Menus and Meals, as all meals are under a menu option, see fazer
                 datastore.createMeal('Mau-Kas', meal.Name, meal.Diets[0]).then(async r => {
                     // meal created if had not existed beforehand
                     await console.log(r)
