@@ -58,7 +58,7 @@ const getAllMealsRestaurant = async (restaurant) => {
 // returns either meal if existing or undefined if not existing
 const getMealExisting = async (restaurant, mealName) => {
     return await getAllMealsRestaurant(restaurant).then(meals => {
-        return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+        return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
     })
 }
 
@@ -105,7 +105,7 @@ const createMeal = async (restaurant, mealName, allergies) => {
 
     // TODO: check if meal exists first
     if (m) { // meal already exists
-        console.log("------- MEAL ALREAY EXISTS -----------------", m.name)
+        console.log("Meal already exists: ", m.name)
         return m
     }
 
@@ -117,6 +117,8 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'rating': [],
         'url': [],
     }
+
+    console.log("Adding new meal: ", mealName)
 
     return datastore.insert({key: key, data: meal}).then(async m => {
         const [entity] = await datastore.get(key)

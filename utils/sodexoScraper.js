@@ -15,6 +15,8 @@ const nameIdDict = {
     'tietotekniikantalo': 86,
 }
 
+const sodexoRests = Object.keys(nameIdDict)
+
 async function getRestaurantData(name, language) {
     const restaurantId = nameIdDict[name];
     const url = `${restaurantUrlWeekly}${restaurantId}`;
@@ -32,14 +34,15 @@ function mapDataToStandard(restaurantData, language) {
         }
         Object.entries(element.courses).forEach(([key, value]) => {
             const mealElement = value;
-            data.menu.push({
+            let allergens =
+            mealDay.menu.push({
                 Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
                 Price: mealElement.price,
                 Meals: [
                     {
                         Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
                         Diets: ('dietcodes' in mealElement) ? mealElement.dietcodes.split(',').map((dietElement) => dietElement.trim()) : "",
-                        Allergens: mealElement.additionalDietInfo.allergens.split(',').map(element => element.trim())
+                        Allergens: [] ? mealElement.additionalDietInfo.allergens === undefined : mealElement.additionalDietInfo.allergens.split(',').map(element => element.trim()) // TODO: fix if empty
                     }
                 ]
             })
@@ -49,5 +52,6 @@ function mapDataToStandard(restaurantData, language) {
 }
 
 module.exports = {
-    getRestaurantData
+    getRestaurantData,
+    sodexoRests,
 };
