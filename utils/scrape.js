@@ -20,9 +20,9 @@ const datastore = require('../db/datastore')
  */
 
 scrapeAllData = () => {
-    datastore.clearWeeklyMeals().then(async r => {
+    datastore.clearWeeklyMeals().then(() => {
         // weekly meals emptied
-        console.log(r)
+        console.log(" ---------- MEALS EMPTIED -----------------")
     })
 
     // go through each restaurant done later. for now only work with one restaurant
@@ -30,16 +30,16 @@ scrapeAllData = () => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
             day.menu.forEach((meal) => {
-                console.log(meal)
-                datastore.createMeal('Mau-Kas', meal.Name, meal.Diets[0]).then(async r => {
+                datastore.createMeal('Mau-Kas', meal.Name, meal.Diets[0]).then(r => {
                     // meal created if had not existed beforehand
-                    await console.log(r)
+                    datastore.copyMealWeekly(r, day.date).then(m => {
+                        console.log(m)
+                    })
                 })
             })
         })
     })
 }
-
 
 
 module.exports = scrapeAllData;
