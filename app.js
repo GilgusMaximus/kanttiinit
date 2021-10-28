@@ -10,7 +10,6 @@ var scraper = require('./utils/scrape')
 var indexRouter = require('./routes/index');
 var restaurantRouter = require('./routes/restaurants');
 
-
 var app = express();
 
 // view engine setup

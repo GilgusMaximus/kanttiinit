@@ -15,8 +15,6 @@ const nameIdDict = {
     'tietotekniikantalo': 86,
 }
 
-const sodexoRest = Object.keys(nameIdDict)
-
 async function getRestaurantData(name, language) {
     const restaurantId = nameIdDict[name];
     const url = `${restaurantUrlWeekly}${restaurantId}`;
@@ -24,9 +22,10 @@ async function getRestaurantData(name, language) {
 }
 
 function mapDataToStandard(restaurantData, language) {
-    const weekStart = createDateFromDotDate(restaurantData.data.timeperiod.split('-')[0].trim()+"2021");
+    // determine monday date as we get start and end of week as string
+    const weekStart = createDateFromDotDate(`${restaurantData.data.timeperiod.split('-')[0].trim()}2021`);
     return restaurantData.data.mealdates.map((element, index) => {
-        const data = {
+        const mealDay = {
             day: element.date,
             date: new Date(weekStart.getDate()+index),
             menu: []
@@ -45,11 +44,10 @@ function mapDataToStandard(restaurantData, language) {
                 ]
             })
         })
-        return data
+        return mealDay
     })
 }
 
 module.exports = {
-    getRestaurantData,
-    sodexoRest,
+    getRestaurantData
 };

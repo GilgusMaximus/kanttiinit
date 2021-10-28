@@ -1,7 +1,7 @@
 const fazer = require('./fazerScraper');
 const sodexo = require('./sodexoScraper');
-const taffa = require('./taffa');
-const maukas = require('./maukas');
+const taffa = require('./taffaScraper');
+const maukas = require('./maukasScraper');
 
 const datastore = require('../db/datastore')
 
@@ -26,7 +26,7 @@ scrapeAllData = () => {
     })
 
     // go through each restaurant done later. for now only work with one restaurant
-    maukas('en').then(response => {
+    fazer.getRestaurantData('abloc', 'en').then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
             day.menu.forEach((meal) => {

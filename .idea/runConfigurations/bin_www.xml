@@ -2,6 +2,9 @@
   <configuration default="false" name="bin\www" type="NodeJSConfigurationType" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="kanttinit2:*" />
+      <env name="GCLOUD_PROJECT" value="kanttiinit-60c47" />
+      <env name="GOOGLE_APPLICATION_CREDENTIALS" value="E:\Dokumente\Universitaet\Vorlesungsmaterial\Aalto\Design_www_services\kanttiinit-60c47-b0f4e728c3d0.json" />
+      <env name="GCLOUD_STORAGE_BUCKET" value="kanttiinit-60c47.appspot.com" />
     </envs>
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
       <browser url="http://localhost:3000/" />
