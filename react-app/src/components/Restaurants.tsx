@@ -22,8 +22,8 @@ const Restaurants: React.FC<Props> = ({restaurants}) => {
             <Stack spacing={2}
                divider={<Divider orientation="vertical" flexItem />}
             >
-                {restaurants.map((res) => (
-                    <RestaurantWrapper>
+                {restaurants.map((res, index) => (
+                    <RestaurantWrapper key={index}>
                         <Restaurant restaurant={res}/>
                     </RestaurantWrapper>
                 ))}

@@ -1,10 +1,10 @@
 var express = require("express");
 var router = express.Router();
+var db = require('../db/datastore')
+var storage = require('../db/storage')
 
 router.use(errorHandler)
 
-var db = require('../db/datastore')
-var storage = require('../db/storage')
 
 /* GET all meals from restaurant for today? */
 router.get("/", function (req, res, next) {
