@@ -26,7 +26,7 @@ scrapeAllData = () => {
     })
 
     // go through each restaurant done later. for now only work with one restaurant
-    taffa('en').then(response => {
+    fazer.getRestaurantData('abloc', 'en').then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
             day.menu.forEach((meal) => {

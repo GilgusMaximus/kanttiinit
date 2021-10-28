@@ -30,3 +30,6 @@ Use the name inside the Meals array to determine the actual name. Fazer has only
   ]
 }
 ```
+
+An example for the fazer restaurant for thursday could look like this:
+![Fazer](./img/fazer_restaurant_structure_example.png)
