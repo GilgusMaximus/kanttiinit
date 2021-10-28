@@ -7,7 +7,6 @@ var sassMiddleware = require('node-sass-middleware');
 var cors = require('cors')
 
 var indexRouter = require('./routes/index');
-var reviewsRouter = require('./routes/reviews');
 var restaurantRouter = require('./routes/restaurants');
 
 var app = express();
@@ -30,7 +29,6 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(__dirname, 'react-app/build')));
 
 app.use('/', indexRouter);
-app.use('/reviews', reviewsRouter);
 app.use('/restaurants', restaurantRouter);
 
 app.use(function(req, res, next) {

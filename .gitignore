@@ -1,3 +1,7 @@
+# Gcloud
+service-account-file.json
+
+
 # Logs
 logs
 *.log
