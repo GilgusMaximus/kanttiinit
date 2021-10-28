@@ -1,7 +1,7 @@
 const fazer = require('./fazerScraper');
 const sodexo = require('./sodexoScraper');
-const taffa = require('./taffa');
-const maukas = require('./maukas');
+const taffa = require('./taffaScraper');
+const maukas = require('./maukasScraper');
 
 const datastore = require('../db/datastore')
 

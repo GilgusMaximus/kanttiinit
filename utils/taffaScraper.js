@@ -12,12 +12,12 @@ const restaurantUrlFi = "https://about.teknologforeningen.fi/index.php/fi/teekka
 
 async function getRestaurantData(language) {
     const url = (language === 'fi') ? restaurantUrlFi : restaurantUrlEn;
-    let data = await makeHTTPSRequest(url);
+    const htmlData = await makeHTTPSRequest(url);
     // Regex needed to extract the required data from the HTML with as little wrapper as possible for the parser
-    data = data.data.match(/<div class=\"small-12 medium-3 large-3 small-order-3 medium-order-3 column(.)*<!-- Footer -->/s)[0];
+    const matchedHtml = htmlData.data.match(/<div class=\"small-12 medium-3 large-3 small-order-3 medium-order-3 column(.)*<!-- Footer -->/s)[0];
     // Cleanup as the regex does not produce valid HTML for the parser
-    data = data.substr(0, data.length - 31);
-    return mapDataToStandard(extractDataFromHtml(htmlParser.parseDocument(data).children[0]));
+    const validHtmlMatch = matchedHtml.substr(0, matchedHtml.length - 31);
+    return mapDataToStandard(extractDataFromHtml(htmlParser.parseDocument(validHtmlMatch).children[0]));
 }
 
 
@@ -44,7 +44,7 @@ function extractDataFromHtml(htmlData) {
 }
 
 function mapDataToStandard(restaurantData) {
-    const data = restaurantData.map((element, index) => {
+    return restaurantData.map((element, index) => {
         const dayDate = element.date.split(' ')
         const dayMeals = {
             day: dayDate[0],
@@ -65,7 +65,6 @@ function mapDataToStandard(restaurantData) {
         })
         return dayMeals
     })
-    return data
 }
 
 module.exports = getRestaurantData;

@@ -10,12 +10,10 @@ const restaurantURL = "https://www.mau-kas.fi/ravintola.html?listtype=lunch&ci=0
 async function getRestaurantData(language) {
     const htmlPage = await makeHTTPSRequest(restaurantURL);
     // Regex needed to extract the required data from the HTML with as little wrapper as possible for the parser
-    let data = htmlPage.data.match(/<div class="restaurant_menulist_menu">.+?(?=<div id="content_bottom">)/s)[0]
+    let matchedHtml = htmlPage.data.match(/<div class="restaurant_menulist_menu">.+?(?=<div id="content_bottom">)/s)[0]
     // clean up as the regex result itself is not valid HTML
-    data = data.substr(0, data.length-15)
-    // TODO take care of language
-    return mapDataToStandard(extractDataFromHTML(htmlParser.parseDocument(data)), language)
-    return data
+    matchedHtml = matchedHtml.substr(0, matchedHtml.length-15)
+    return mapDataToStandard(extractDataFromHTML(htmlParser.parseDocument(matchedHtml)), language)
 }
 
 function extractDataFromHTML(htmlParsed) {
@@ -43,13 +41,13 @@ function extractDataFromHTML(htmlParsed) {
 
 function mapDataToStandard(restaurantData, language) {
     const currentDate = new Date();
-    const data = restaurantData.map((element, index) => {
+    return restaurantData.map((element, index) => {
         const dayMeals = {
             day: element.day.split('\n')[1].trim(),
             date: new Date(currentDate.setDate(currentDate.getDate()+(index-currentDate.getDay()+1))),
             menu: []
         }
-        element.meals.forEach((mealElement, index) => {
+        element.meals.forEach((mealElement, mealIndex) => {
             const mealSplit = mealElement.split('/')
             if(mealSplit.length === 1) {
                 const dietSplit = (mealSplit.length > 1) ? mealSplit[1].split(' ' ) : mealSplit[0].split(' ')
@@ -72,6 +70,5 @@ function mapDataToStandard(restaurantData, language) {
         })
         return dayMeals
     })
-    return data
 }
 module.exports = getRestaurantData;
