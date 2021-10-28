@@ -55,6 +55,29 @@ const getAllMealsRestaurant = async (restaurant) => {
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
+const getWeeklyMealsRestaurant = async (restaurant) => {
+    const query = datastore.createQuery(mealWeeklyKind);
+    let [meals] = await datastore.runQuery(query);
+    return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
+}
+
+const getWeeklyMealsDates = async (restaurant) => {
+    return await getWeeklyMealsRestaurant(restaurant).then(meals => {
+        obj = {}
+        meals.forEach(meal => {
+            if (meal.date in obj) {
+                obj[meal.date].push(meal)
+            } else {
+                obj[meal.date] = [meal]
+            }
+        })
+        let arr = Object.values(obj)
+        arr.sort((a, b) => a[0].date > b[0].date ? 1 : -1)
+        return arr
+    })
+
+}
+
 // returns either meal if existing or undefined if not existing
 const getMealExisting = async (restaurant, mealName) => {
     return await getAllMealsRestaurant(restaurant).then(meals => {
@@ -174,4 +197,6 @@ module.exports = {
     copyMealWeekly,
     clearWeeklyMeals,
     getWeeklyMeals,
+    getWeeklyMealsRestaurant,
+    getWeeklyMealsDates
 }
