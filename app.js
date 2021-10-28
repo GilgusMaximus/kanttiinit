@@ -17,7 +17,6 @@ const b=  getTaffaRestaurantData('en');
 const c =  getMaukasRestaurantData('fi')
 
 var indexRouter = require('./routes/index');
-var reviewsRouter = require('./routes/reviews');
 var restaurantRouter = require('./routes/restaurants');
 
 
@@ -38,10 +37,9 @@ app.use(sassMiddleware({
   indentedSyntax: true, // true = .sass and false = .scss
   sourceMap: true
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'react-app/build')));
 
 app.use('/', indexRouter);
-app.use('/reviews', reviewsRouter);
 app.use('/restaurants', restaurantRouter);
 
 app.use(function(req, res, next) {
@@ -66,6 +64,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(4000, () => console.log(`Listening on port 4000`));
+app.listen(8080, () => console.log(`Listening on port 8080`));
 
 module.exports = app;
