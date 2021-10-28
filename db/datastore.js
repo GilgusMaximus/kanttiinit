@@ -83,6 +83,18 @@ const copyMealWeekly = async (mealEntity) => {
 const copyMealsWeekly = async (mealEntities) => {
 }
 
+const getWeeklyMeals = async () => {
+    const query = datastore.createQuery(mealWeeklyKind);
+    const [meals] = await datastore.runQuery(query);
+    return meals
+}
+
+const clearWeeklyMeals = async () => {
+    await getWeeklyMeals().then(async r => {
+        await datastore.delete(r)
+    })
+}
+
 
 // used for scraper
 const createMeal = async (restaurant, mealName, allergies) => {
@@ -90,11 +102,11 @@ const createMeal = async (restaurant, mealName, allergies) => {
         return r
     })
 
+    // TODO: check if meal exists first
     if (m) { // meal already exists
         return m
     }
 
-    // TODO: check if meal exists first
     const key = datastore.key(mealArchiveKind);
     const meal = {
         'name': mealName,
@@ -155,4 +167,6 @@ module.exports = {
     createMeal,
     getAllMealsRestaurant,
     copyMealWeekly,
+    clearWeeklyMeals,
+    getWeeklyMeals,
 }

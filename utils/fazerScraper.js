@@ -13,6 +13,8 @@ const nameIdDict = {
     'tuas': 178677,
 }
 
+const fazerRest = Object.keys(nameIdDict)
+
 async function getRestaurantData(name, language) {
     const restaurantId = nameIdDict[name];
     const currentDate = new Date().toISOString().split('T')[0];
@@ -31,4 +33,7 @@ async function getRestaurantData(name, language) {
     return weekMeals;
 }
 
-module.exports = getRestaurantData;
+module.exports = {
+    getRestaurantData,
+    fazerRest,
+};

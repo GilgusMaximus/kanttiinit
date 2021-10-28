@@ -15,6 +15,8 @@ const nameIdDict = {
     'tietotekniikantalo': 86,
 }
 
+const sodexoRest = Object.keys(nameIdDict)
+
 async function getRestaurantData(name, language) {
     const restaurantId = nameIdDict[name];
     const url = `${restaurantUrlWeekly}${restaurantId}`;
@@ -47,4 +49,7 @@ function mapDataToStandard(restaurantData, language) {
     })
 }
 
-module.exports = getRestaurantData;
+module.exports = {
+    getRestaurantData,
+    sodexoRest,
+};
