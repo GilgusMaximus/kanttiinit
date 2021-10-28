@@ -63,7 +63,7 @@ const getMealExisting = async (restaurant, mealName) => {
 }
 
 
-const copyMealWeekly = async (mealEntity) => {
+const copyMealWeekly = async (mealEntity, date) => {
     const key = datastore.key(mealWeeklyKind)
     const meal = {
         'name': mealEntity.name,
@@ -71,7 +71,7 @@ const copyMealWeekly = async (mealEntity) => {
         'allergies': mealEntity.allergies,
         'rating': mealEntity.rating,
         'url': mealEntity.url,
-        'date': mealEntity.date,
+        'date': date,
     }
 
     datastore.insert({key: key, data: meal}).then(r => {
@@ -91,7 +91,8 @@ const getWeeklyMeals = async () => {
 
 const clearWeeklyMeals = async () => {
     await getWeeklyMeals().then(async r => {
-        await datastore.delete(r)
+        let keys = r.map(x => x[datastore.KEY])
+        await datastore.delete(keys)
     })
 }
 
@@ -104,6 +105,7 @@ const createMeal = async (restaurant, mealName, allergies) => {
 
     // TODO: check if meal exists first
     if (m) { // meal already exists
+        console.log("------- MEAL ALREAY EXISTS -----------------", m.name)
         return m
     }
 
@@ -116,8 +118,9 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'url': [],
     }
 
-    datastore.insert({key: key, data: meal}).then(() => {
-        // Meal inserted successfully.
+    return datastore.insert({key: key, data: meal}).then(async m => {
+        const [entity] = await datastore.get(key)
+        return entity
     })
 }
 
