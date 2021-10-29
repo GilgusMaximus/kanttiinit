@@ -1,34 +1,34 @@
 import React from 'react'
 import Restaurant from './Restaurant'
-import Stack from '@mui/material/Stack';
-import {styled} from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Divider from '@mui/material/Divider';
+import { Grid, Box } from '@mui/material'
 
 type Props = {
     restaurants: any[]
 }
 
-const RestaurantWrapper = styled(Paper)(({theme}) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+// const RestaurantWrapper = styled(Paper)(({theme}) => ({
+//     ...theme.typography.body2,
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary,
+// }));
 
 const Restaurants: React.FC<Props> = ({restaurants}) => {
     return (
-        <div>
-            <Stack spacing={2}
-               divider={<Divider orientation="vertical" flexItem />}
-            >
+        <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            py={2}
+        >
+            <Grid container spacing={2} direction="column" width="98%">
                 {restaurants.map((res, index) => (
-                    <RestaurantWrapper key={index}>
+                    <Grid item key={index} sm={4}>
                         <Restaurant restaurant={res}/>
-                    </RestaurantWrapper>
+                    </Grid>
                 ))}
-            </Stack>
-        </div>
+            </Grid>
+        </Box>
     )
 }
 
