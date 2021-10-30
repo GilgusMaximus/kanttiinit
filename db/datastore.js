@@ -22,6 +22,19 @@ const getRestaurant = async (name) => {
     })
 }
 
+const getAllRestaurantsAndMeals = async () => {
+
+}
+
+const getRestaurantAndMeals = async (name) => {
+    return await getRestaurant(name).then(async rest => {
+        return await getWeeklyMealsRestaurant(name).then(meals => {
+            rest['meals'] = meals
+            return rest
+        })
+    })
+}
+
 // we don't have ratings yet, so this wouldn't work yet
 const getRestaurantRatings = async (name) => {
     return await getRestaurant(name).then(rest => {
@@ -55,6 +68,26 @@ const getAllMealsRestaurant = async (restaurant) => {
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
+const getWeeklyMealsDate = async (date) => {
+    return await getWeeklyMeals().then(response => {
+        return response.filter(m => m.date === date)
+    })
+}
+
+const dateFormat = (date) => {
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // getUTCMonth() returns month from 0 to 11
+    const year = date.getUTCFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+
+const getWeeklyMealsDateRestaurant = async (date, restaurant) => {
+    return await getWeeklyMealsRestaurant(restaurant).then(response => {
+        return response.filter(m => dateFormat(m.date) === date)
+    })
+}
+
 const getWeeklyMealsRestaurant = async (restaurant) => {
     const query = datastore.createQuery(mealWeeklyKind);
     let [meals] = await datastore.runQuery(query);
@@ -63,7 +96,7 @@ const getWeeklyMealsRestaurant = async (restaurant) => {
 
 const getWeeklyMealsDates = async (restaurant) => {
     return await getWeeklyMealsRestaurant(restaurant).then(meals => {
-        obj = {}
+        let obj = {}
         meals.forEach(meal => {
             if (meal.date in obj) {
                 obj[meal.date].push(meal)
@@ -100,10 +133,6 @@ const copyMealWeekly = async (mealEntity, date) => {
     datastore.insert({key: key, data: meal}).then(r => {
         // inserted successfully
     })
-}
-
-
-const copyMealsWeekly = async (mealEntities) => {
 }
 
 const getWeeklyMeals = async () => {
@@ -171,6 +200,7 @@ const addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
     // return ratingNumber
 }
 
+
 //TODO: add to both meal kind and meal archive kind
 const addMealImage = async (restaurant, mealName, url, kind = mealArchiveKind) => {
     const query = datastore.createQuery(kind);
@@ -198,5 +228,9 @@ module.exports = {
     clearWeeklyMeals,
     getWeeklyMeals,
     getWeeklyMealsRestaurant,
-    getWeeklyMealsDates
+    getWeeklyMealsDates,
+    getRestaurantAndMeals,
+    getAllRestaurantsAndMeals,
+    getWeeklyMealsDate,
+    getWeeklyMealsDateRestaurant,
 }
