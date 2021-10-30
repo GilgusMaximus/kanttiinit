@@ -22,16 +22,53 @@ const getRestaurant = async (name) => {
     })
 }
 
-const getAllRestaurantsAndMeals = async () => {
-
+const getAllRestaurantsAndMeals = async (date) => {
+    return await getAllRestaurants().then(async rests => {
+        rests.forEach(x => x["meals"] = [])
+        if (date) {
+            return await getWeeklyMealsDate(date).then(meals => {
+                console.log(meals.length)
+                let obj = {}
+                meals.forEach(meal => {
+                    if (meal.restaurant in obj) {
+                        obj[meal.restaurant].push(meal)
+                    } else {
+                        obj[meal.restaurant] = [meal]
+                    }
+                })
+                rests.forEach(r => r["meals"] = obj[r.name])
+                return rests
+            })
+        } else {
+            return await getWeeklyMeals().then(meals => {
+                let obj = {}
+                meals.forEach(meal => {
+                    if (meal.restaurant in obj) {
+                        obj[meal.restaurant].push(meal)
+                    } else {
+                        obj[meal.restaurant] = [meal]
+                    }
+                })
+                rests.forEach(r => r["meals"] = obj[r.name])
+                return rests
+            })
+        }
+    })
 }
 
-const getRestaurantAndMeals = async (name) => {
+const getRestaurantAndMeals = async (name, date) => {
     return await getRestaurant(name).then(async rest => {
-        return await getWeeklyMealsRestaurant(name).then(meals => {
-            rest['meals'] = meals
-            return rest
-        })
+        if (date) {
+            return await getWeeklyMealsDateRestaurant(date, name).then(meals => {
+                rest['meals'] = meals
+                return rest
+            })
+        } else {
+            return await getWeeklyMealsRestaurant(name).then(meals => {
+                rest['meals'] = meals
+                return rest
+            })
+        }
     })
 }
 
@@ -70,7 +107,9 @@ const getAllMealsRestaurant = async (restaurant) => {
 
 const getWeeklyMealsDate = async (date) => {
     return await getWeeklyMeals().then(response => {
-        return response.filter(m => m.date === date)
+        console.log(response[0].date)
+        console.log(date)
+        return response.filter(m => dateFormat(m.date) === date)
     })
 }
 
@@ -79,7 +118,7 @@ const dateFormat = (date) => {
     const month = date.getUTCMonth() + 1; // getUTCMonth() returns month from 0 to 11
     const year = date.getUTCFullYear();
 
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
 }
 
 const getWeeklyMealsDateRestaurant = async (date, restaurant) => {

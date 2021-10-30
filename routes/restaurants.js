@@ -8,18 +8,14 @@ const db = require('../db/datastore');
 
 /* GET all restaurants and res meals */
 router.get("/", function (req, res, next) {
-    db.getAllRestaurants().then(response => {
+    db.getAllRestaurantsAndMeals(req.query["day"]).then(response => {
         res.send(response)
     });
 });
 
 router.get("/:name", function (req, res, next) {
-    db.getRestaurantAndMeals(req.params.name).then(response => {
+    db.getRestaurantAndMeals(req.params.name, req.query["day"]).then(response => {
         res.send(response)
-    })
-
-    db.getWeeklyMealsDateRestaurant("25/10/2021", req.params.name).then(r => {
-        console.log(r)
     })
 });
 
