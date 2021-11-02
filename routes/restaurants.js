@@ -11,28 +11,48 @@ let restaurants = [
         name: "dipoli",
         location: "aaaaaa",
         pricing: 1,
-        url: "dipoli.com",
+        url: "https://www.foodandco.fi/en/restaurants/Ravintolat-kaupungeittain/espoo/dipoli/",
+        meals: {
+            Lunch_1: ["Meatballs", "rice", "banana"],
+            Lunch_2: ["Meatballs", "rice", "banana"],
+            Chefs_Corner: ["Meatballs", "rice", "banana"],
+        },
     },
     {
         id: 1,
         name: "abloc",
         location: "bbbbbbb",
         pricing: 1,
-        url: "abloc.com",
+        url: "https://www.foodandco.fi/en/restaurants/Ravintolat-kaupungeittain/espoo/dipoli/",
+        meals: {
+            Lunch_1: ["Meatballs", "rice", "banana"],
+            Lunch_2: ["Meatballs", "rice", "banana"],
+            Chefs_Corner: ["Meatballs", "rice", "banana"],
+        },
     },
     {
         id: 2,
         name: "täffä",
         location: "cccc",
         pricing: 1,
-        url: "taffa.com",
+        url: "https://www.foodandco.fi/en/restaurants/Ravintolat-kaupungeittain/espoo/dipoli/",
+        meals: {
+            Lunch_1: ["Meatballs", "rice", "banana"],
+            Lunch_2: ["Meatballs", "rice", "banana"],
+            Chefs_Corner: ["Meatballs", "rice", "banana"],
+        },
     },
     {
         id: 3,
         name: "Computer Science Building",
         location: "dddd",
         pricing: 1,
-        url: "csbuilding.com",
+        url: "https://www.foodandco.fi/en/restaurants/Ravintolat-kaupungeittain/espoo/dipoli/",
+        meals: {
+            Lunch_1: ["Meatballs", "rice", "banana"],
+            Lunch_2: ["Meatballs", "rice", "banana"],
+            Chefs_Corner: ["Meatballs", "rice", "banana"],
+        },
     },
 ];
 
