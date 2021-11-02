@@ -40,7 +40,7 @@ const getAllRestaurantsAndMeals = async (date) => {
                 return rests
             })
         } else {
-            return await getWeeklyMeals().then(meals => {
+            return await getWeeklyMealsDate(dateFormat(new Date())).then(meals => {
                 let obj = {}
                 meals.forEach(meal => {
                     if (meal.restaurant in obj) {
@@ -150,6 +150,12 @@ const getWeeklyMealsDates = async (restaurant) => {
 
 }
 
+const getMenuExisting = async (restaurant, menu) => {
+    return await getAllMealsRestaurant(restaurant).then(meals => {
+        // return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
+    })
+}
+
 // returns either meal if existing or undefined if not existing
 const getMealExisting = async (restaurant, mealName) => {
     return await getAllMealsRestaurant(restaurant).then(meals => {
@@ -184,6 +190,31 @@ const clearWeeklyMeals = async () => {
     await getWeeklyMeals().then(async r => {
         let keys = r.map(x => x[datastore.KEY])
         await datastore.delete(keys)
+    })
+}
+
+
+const createMenu = async (restaurant, menu) => {
+    let m = await getMenuExisting(restaurant, menu)
+
+    if (m) { // menu already exists
+        return m
+    }
+
+    const key = datastore.key(mealArchiveKind);
+    const meal = {
+        'name': mealName,
+        'restaurant': restaurant,
+        'allergies': allergies,
+        'rating': [],
+        'url': [],
+    }
+
+    console.log("Adding new meal: ", mealName)
+
+    return datastore.insert({key: key, data: meal}).then(async m => {
+        const [entity] = await datastore.get(key)
+        return entity
     })
 }
 

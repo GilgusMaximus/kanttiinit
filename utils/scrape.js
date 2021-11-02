@@ -20,14 +20,13 @@ const datastore = require('../db/datastore')
  */
 
 scrapeAllData = async () => {
-    // await datastore.clearWeeklyMeals().then(async () => {
-    //     await console.log(" ---------- MEALS EMPTIED ------------- ")
-    // })
-    //
-    // createMaukasMeals()
-    // createTaffaMeals()
-    // createFazerMeals()
-    // createSodexoMeals()
+    await datastore.clearWeeklyMeals().then(async () => {
+        await console.log(" ---------- MEALS EMPTIED ------------- ")
+    })
+    createMaukasMeals()
+    createTaffaMeals()
+    createFazerMeals()
+    createSodexoMeals()
 }
 
 const createRestaurantMeals = (restaurantName, scrapeFunc) => {
@@ -47,13 +46,15 @@ const createRestaurantMeals = (restaurantName, scrapeFunc) => {
     })
 }
 
+
 const createFazerMeal = (restaurantName, scrapeFunc) => {
     // go through each restaurant done later. for now only work with one restaurant
     scrapeFunc.then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
-            day.menu.forEach((meal) => {
-                meal.Meals.forEach(async (m) => {
+            day.menu.forEach((menu) => {
+                // await datastore.createMenu(restaurantName, menu)
+                menu.Meals.forEach(async (m) => {
                     await datastore.createMeal(restaurantName, m.Name, m.Diets).then(async r => {
                         // meal created if had not existed beforehand
                         await datastore.copyMealWeekly(r, day.date).then(async response => {

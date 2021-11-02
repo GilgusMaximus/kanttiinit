@@ -40,7 +40,9 @@ function extractDataFromHtml(htmlData) {
                 return;
             }
             // actual items
-            dayMeals[dayMeals.length - 1].meals.push(mealTag.children[0].data);
+            if(mealTag.children.length > 0) {
+                dayMeals[dayMeals.length - 1].meals.push(mealTag.children[0].data);
+            }
         });
     }
     return dayMeals;

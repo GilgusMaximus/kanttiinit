@@ -34,7 +34,6 @@ function mapDataToStandard(restaurantData, language) {
         }
         Object.entries(element.courses).forEach(([key, value]) => {
             const mealElement = value;
-            let allergens =
             mealDay.menu.push({
                 Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
                 Price: mealElement.price,
@@ -42,7 +41,7 @@ function mapDataToStandard(restaurantData, language) {
                     {
                         Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
                         Diets: ('dietcodes' in mealElement) ? mealElement.dietcodes.split(',').map((dietElement) => dietElement.trim()) : "",
-                        Allergens: [] ? mealElement.additionalDietInfo.allergens === undefined : mealElement.additionalDietInfo.allergens.split(',').map(element => element.trim()) // TODO: fix if empty
+                        Allergens: [] ? mealElement === undefined : mealElement.additionalDietInfo.allergens.split(',').map(element => element.trim()) // TODO: fix if empty
                     }
                 ]
             })
