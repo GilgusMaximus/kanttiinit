@@ -22,6 +22,56 @@ const getRestaurant = async (name) => {
     })
 }
 
+const getAllRestaurantsAndMeals = async (date) => {
+    return await getAllRestaurants().then(async rests => {
+        rests.forEach(x => x["meals"] = [])
+        if (date) {
+            return await getWeeklyMealsDate(date).then(meals => {
+                console.log(meals.length)
+                let obj = {}
+                meals.forEach(meal => {
+                    if (meal.restaurant in obj) {
+                        obj[meal.restaurant].push(meal)
+                    } else {
+                        obj[meal.restaurant] = [meal]
+                    }
+                })
+                rests.forEach(r => r["meals"] = obj[r.name])
+                return rests
+            })
+        } else {
+            return await getWeeklyMealsDate(dateFormat(new Date())).then(meals => {
+                let obj = {}
+                meals.forEach(meal => {
+                    if (meal.restaurant in obj) {
+                        obj[meal.restaurant].push(meal)
+                    } else {
+                        obj[meal.restaurant] = [meal]
+                    }
+                })
+                rests.forEach(r => r["meals"] = obj[r.name])
+                return rests
+            })
+        }
+    })
+}
+
+const getRestaurantAndMeals = async (name, date) => {
+    return await getRestaurant(name).then(async rest => {
+        if (date) {
+            return await getWeeklyMealsDateRestaurant(date, name).then(meals => {
+                rest['meals'] = meals
+                return rest
+            })
+        } else {
+            return await getWeeklyMealsRestaurant(name).then(meals => {
+                rest['meals'] = meals
+                return rest
+            })
+        }
+    })
+}
+
 // we don't have ratings yet, so this wouldn't work yet
 const getRestaurantRatings = async (name) => {
     return await getRestaurant(name).then(rest => {
@@ -55,10 +105,61 @@ const getAllMealsRestaurant = async (restaurant) => {
     return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
 }
 
+const getWeeklyMealsDate = async (date) => {
+    return await getWeeklyMeals().then(response => {
+        console.log(response[0].date)
+        console.log(date)
+        return response.filter(m => dateFormat(m.date) === date)
+    })
+}
+
+const dateFormat = (date) => {
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // getUTCMonth() returns month from 0 to 11
+    const year = date.getUTCFullYear();
+
+    return `${year}-${month}-${day}`;
+}
+
+const getWeeklyMealsDateRestaurant = async (date, restaurant) => {
+    return await getWeeklyMealsRestaurant(restaurant).then(response => {
+        return response.filter(m => dateFormat(m.date) === date)
+    })
+}
+
+const getWeeklyMealsRestaurant = async (restaurant) => {
+    const query = datastore.createQuery(mealWeeklyKind);
+    let [meals] = await datastore.runQuery(query);
+    return meals.filter(x => x.restaurant.toLowerCase() === restaurant.toLowerCase())
+}
+
+const getWeeklyMealsDates = async (restaurant) => {
+    return await getWeeklyMealsRestaurant(restaurant).then(meals => {
+        let obj = {}
+        meals.forEach(meal => {
+            if (meal.date in obj) {
+                obj[meal.date].push(meal)
+            } else {
+                obj[meal.date] = [meal]
+            }
+        })
+        let arr = Object.values(obj)
+        arr.sort((a, b) => a[0].date > b[0].date ? 1 : -1)
+        return arr
+    })
+
+}
+
+const getMenuExisting = async (restaurant, menu) => {
+    return await getAllMealsRestaurant(restaurant).then(meals => {
+        // return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
+    })
+}
+
 // returns either meal if existing or undefined if not existing
 const getMealExisting = async (restaurant, mealName) => {
     return await getAllMealsRestaurant(restaurant).then(meals => {
-        return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+        return meals.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
     })
 }
 
@@ -79,10 +180,6 @@ const copyMealWeekly = async (mealEntity, date) => {
     })
 }
 
-
-const copyMealsWeekly = async (mealEntities) => {
-}
-
 const getWeeklyMeals = async () => {
     const query = datastore.createQuery(mealWeeklyKind);
     const [meals] = await datastore.runQuery(query);
@@ -97,15 +194,10 @@ const clearWeeklyMeals = async () => {
 }
 
 
-// used for scraper
-const createMeal = async (restaurant, mealName, allergies) => {
-    let m = await getMealExisting(restaurant, mealName).then(r => {
-        return r
-    })
+const createMenu = async (restaurant, menu) => {
+    let m = await getMenuExisting(restaurant, menu)
 
-    // TODO: check if meal exists first
-    if (m) { // meal already exists
-        console.log("------- MEAL ALREAY EXISTS -----------------", m.name)
+    if (m) { // menu already exists
         return m
     }
 
@@ -117,6 +209,38 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'rating': [],
         'url': [],
     }
+
+    console.log("Adding new meal: ", mealName)
+
+    return datastore.insert({key: key, data: meal}).then(async m => {
+        const [entity] = await datastore.get(key)
+        return entity
+    })
+}
+
+
+// used for scraper
+const createMeal = async (restaurant, mealName, allergies) => {
+    let m = await getMealExisting(restaurant, mealName).then(r => {
+        return r
+    })
+
+    // TODO: check if meal exists first
+    if (m) { // meal already exists
+        console.log("Meal already exists: ", m.name)
+        return m
+    }
+
+    const key = datastore.key(mealArchiveKind);
+    const meal = {
+        'name': mealName,
+        'restaurant': restaurant,
+        'allergies': allergies,
+        'rating': [],
+        'url': [],
+    }
+
+    console.log("Adding new meal: ", mealName)
 
     return datastore.insert({key: key, data: meal}).then(async m => {
         const [entity] = await datastore.get(key)
@@ -146,6 +270,7 @@ const addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
     // return ratingNumber
 }
 
+
 //TODO: add to both meal kind and meal archive kind
 const addMealImage = async (restaurant, mealName, url, kind = mealArchiveKind) => {
     const query = datastore.createQuery(kind);
@@ -172,4 +297,10 @@ module.exports = {
     copyMealWeekly,
     clearWeeklyMeals,
     getWeeklyMeals,
+    getWeeklyMealsRestaurant,
+    getWeeklyMealsDates,
+    getRestaurantAndMeals,
+    getAllRestaurantsAndMeals,
+    getWeeklyMealsDate,
+    getWeeklyMealsDateRestaurant,
 }

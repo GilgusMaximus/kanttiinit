@@ -10,7 +10,7 @@ router.use(errorHandler)
 router.get("/", function (req, res, next) {
     const restaurant = req.restaurant;
 
-    db.getAllMealsRestaurant(restaurant).then((r) => {
+    db.getWeeklyMealsDates(restaurant).then((r) => {
         res.send(r)
     })
 });

@@ -6,15 +6,15 @@ var rratingRouter = require('./rratings');
 
 const db = require('../db/datastore');
 
-/* GET all restaurants */
+/* GET all restaurants and res meals */
 router.get("/", function (req, res, next) {
-    db.getAllRestaurants().then(response => {
+    db.getAllRestaurantsAndMeals(req.query["day"]).then(response => {
         res.send(response)
     });
 });
 
 router.get("/:name", function (req, res, next) {
-    db.getRestaurant(req.params.name).then(response => {
+    db.getRestaurantAndMeals(req.params.name, req.query["day"]).then(response => {
         res.send(response)
     })
 });
