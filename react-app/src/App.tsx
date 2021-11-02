@@ -5,7 +5,6 @@ import Restaurants from './components/Restaurants'
 import RightDrawer from "./components/RightDrawer";
 
 class App extends Component {
-    
 
     render() {
         return (

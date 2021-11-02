@@ -1,5 +1,10 @@
 # Kanttiinit
 
+## Frontend TODO
+- keep nav bar while scrolling
+- proper font
+- price component
+
 
 ## Routes
 

@@ -1,3 +1,9 @@
+.Restaurant-text {
+  font-size: calc(10px + 2vmin);
+  color: '#5F6368';
+}
+
+/* Defunct */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
