@@ -68,7 +68,7 @@ const createFazerMeal = (restaurantName, scrapeFunc) => {
 }
 
 const createMaukasMeals = () => {
-    createRestaurantMeals('Mau-Kas', maukas('en'))
+    createRestaurantMeals('Mau-kas', maukas('en'))
 }
 
 const createTaffaMeals = () => {
@@ -77,9 +77,9 @@ const createTaffaMeals = () => {
 
 const createFazerMeals = () => {
     // fazer.fazerRests.forEach(name => createRestaurantMeals('Mau-Kas', fazer.getRestaurantData(name, 'en')))
-    createFazerMeal('A-Bloc', fazer.getRestaurantData('abloc', 'en'))
+    createFazerMeal('A Bloc', fazer.getRestaurantData('abloc', 'en'))
     createFazerMeal('Alvari', fazer.getRestaurantData('alvari', 'en'))
-    createFazerMeal('Dipoli', fazer.getRestaurantData('dipoli', 'en'))
+    createFazerMeal('Dipoli Reima', fazer.getRestaurantData('dipoli', 'en'))
     createFazerMeal('TUAS', fazer.getRestaurantData('tuas', 'en'))
 }
 

@@ -107,8 +107,6 @@ const getAllMealsRestaurant = async (restaurant) => {
 
 const getWeeklyMealsDate = async (date) => {
     return await getWeeklyMeals().then(response => {
-        console.log(response[0].date)
-        console.log(date)
         return response.filter(m => dateFormat(m.date) === date)
     })
 }
