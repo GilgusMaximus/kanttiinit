@@ -35,11 +35,11 @@ function mapDataToStandard(restaurantData, language) {
         Object.entries(element.courses).forEach(([key, value]) => {
             const mealElement = value;
             mealDay.menu.push({
-                Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
+                Name: mealElement.category,
                 Price: mealElement.price,
                 Meals: [
                     {
-                        Name: (language === 'fi') ? mealElement.title_fi : mealElement.title_en,
+                        Name: (language === 'fi' || mealElement.title_en === "") ? mealElement.title_fi : mealElement.title_en,
                         Diets: ('dietcodes' in mealElement) ? mealElement.dietcodes.split(',').map((dietElement) => dietElement.trim()) : "",
                         Allergens: [] ? mealElement === undefined : mealElement.additionalDietInfo.allergens.split(',').map(element => element.trim()) // TODO: fix if empty
                     }
