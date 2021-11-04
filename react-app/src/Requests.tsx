@@ -1,3 +1,5 @@
+import { Restaurants } from './models/Restaurants'
+
 class Requests {
     static fetchUrl = async (url: string) => {
         const response: Response = await fetch(url, {
@@ -21,12 +23,15 @@ class Requests {
         return response.json();
     }
 
-    static fetchRestaurants = async () => {
-        return await this.fetchUrl('http://localhost:4000/restaurants/')
+    static async fetchRestaurants(): Promise<Restaurants> {
+        return this.fetchUrl('/restaurants/')
+            .then((response) => {
+                return new Restaurants(response);
+            });
     }
 
     static fetchMeals = async (restaurant: string) => {
-        return await this.fetchUrl(`http://localhost:4000/restaurants/${restaurant}/meals`)
+        return await this.fetchUrl(`/restaurants/${restaurant}/meals`)
     }
 }
 

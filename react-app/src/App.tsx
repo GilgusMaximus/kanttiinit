@@ -1,37 +1,17 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
-
 import Navbar from './components/Navbar'
 import Restaurants from './components/Restaurants'
 import RightDrawer from "./components/RightDrawer";
-import Requests from "./Requests";
 
 class App extends Component {
-    public state: { res: typeof Restaurants[] } = { // or any[]
-        res: [],
-    }
-
-
-    componentDidMount() {
-        Requests.fetchRestaurants().then(response => {
-            console.log("IN FETCHING", response)
-            this.setState({res: response})
-        })
-    }
 
     render() {
         return (
             <div className="App">
                 <Navbar/>
-
-                <RightDrawer meals={this.state.res}/>
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <h1 className="App-title">Welcome to React</h1>
-                </header>
-
-                <Restaurants restaurants={this.state.res}/>
+                {/* <RightDrawer meals={this.state.res}/> */}
+                <Restaurants/>
             </div>
         );
     }

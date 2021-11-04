@@ -1,35 +1,44 @@
 import React from 'react'
 import Restaurant from './Restaurant'
-import Stack from '@mui/material/Stack';
-import {styled} from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Divider from '@mui/material/Divider';
+import { Grid, Box } from '@mui/material'
+import { Restaurants as RestaurantsModel} from '../models/Restaurants'
+import Requests from "../Requests";
 
-type Props = {
-    restaurants: any[]
-}
+// const RestaurantWrapper = styled(Paper)(({theme}) => ({
+//     ...theme.typography.body2,
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary,
+// }));
 
-const RestaurantWrapper = styled(Paper)(({theme}) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+class Restaurants extends React.Component<{}, { restaurantList: RestaurantsModel }> {
+    state = { restaurantList: new RestaurantsModel() };
 
-const Restaurants: React.FC<Props> = ({restaurants}) => {
-    return (
-        <div>
-            <Stack spacing={2}
-               divider={<Divider orientation="vertical" flexItem />}
+    componentDidMount() {
+        Requests.fetchRestaurants().then(response => {
+            console.log("IN FETCHING", response);
+            this.setState({ restaurantList: response });
+        })
+    }
+    
+    render() {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                py={2}
             >
-                {restaurants.map((res, index) => (
-                    <RestaurantWrapper key={index}>
-                        <Restaurant restaurant={res}/>
-                    </RestaurantWrapper>
-                ))}
-            </Stack>
-        </div>
-    )
+                <Grid container spacing={2} direction="column" width="98%">
+                    {this.state.restaurantList.list.map((res, index) => (
+                        <Grid item key={index} sm={4}>
+                            <Restaurant restaurant={res}/>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+        );
+    }
 }
 
 export default Restaurants

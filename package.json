@@ -15,7 +15,6 @@
     "htmlparser2": "^7.1.2",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "node-sass-middleware": "0.11.0",
     "nodemon": "^2.0.13",
     "npm-force-resolutions": "^0.0.10",
     "pug": "2.0.0-beta11"

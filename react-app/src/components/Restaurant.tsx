@@ -1,37 +1,34 @@
-import * as React from 'react';
-import { useEffect } from "react";
-import Requests from "../Requests";
-import Meals from "./Meals";
+import React from 'react';
+import { Restaurant as RestaurantModel} from '../models/Restaurant'
+import { Grid, Button, Card, CardContent, Typography}  from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 
-type Props = {
-    restaurant: any
-}
-
-
-const Restaurant: React.FC<Props> = ({restaurant}) => {
-    const [state, setState] = React.useState({
-        meals: []
-    });
-
-    useEffect(() => {
-        Requests.fetchMeals(restaurant.name).then(response => {
-            setState({meals: response})
-        });
-    }, [restaurant.name])
-
-    return (
-        <div
-            className={`restaurant-div`}
-            id={`restaurant-${restaurant}`}
-            onClick={() => console.log(restaurant)}
-        >
-            <h3>
-                Restaurant: <a href={restaurant.url}>{restaurant.name}</a> - {restaurant.pricing}/3
-                <Meals meals={state.meals}/>
-
-            </h3>
-        </div>
-    )
+class Restaurant extends React.Component<{ restaurant: RestaurantModel }> {
+    render() {    
+        return (
+            <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4}}>
+                <CardContent>
+                    <Grid container spacing={2} direction="row">
+                        <Grid item>
+                            <Typography variant="h4" component="div"> 
+                                {this.props.restaurant.name}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Button href={this.props.restaurant.url!}>
+                                <HomeIcon onClick={event =>  window.location.href=this.props.restaurant.url!} />                                
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="h4" component="div"> 
+                                {this.props.restaurant.pricing}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        );
+    }
 }
 
 export default Restaurant

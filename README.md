@@ -5,6 +5,11 @@ The following ENV variables need to be set:
 * `GOOGLE_APPLICATION_CREDENTIALS`: location of the gcp service account file  
 * `GCLOUD_STORAGE_BUCKET`: name of the gcp storage bucket  
 
+## Frontend TODO
+- keep nav bar while scrolling
+- proper font
+- price component
+
 
 ## Routes
 `/restaurants`: displays information for all restaurants  
