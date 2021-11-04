@@ -1,7 +1,8 @@
 import React from 'react';
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
-import { Grid, Button, Card, CardContent, Typography}  from '@mui/material';
+import { Grid, Button, Card, CardContent, Typography, IconButton}  from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 class Restaurant extends React.Component<{ restaurant: RestaurantModel }> {
     render() {    
@@ -15,9 +16,9 @@ class Restaurant extends React.Component<{ restaurant: RestaurantModel }> {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Button href={this.props.restaurant.url!}>
-                                <HomeIcon onClick={event =>  window.location.href=this.props.restaurant.url!} />                                
-                            </Button>
+                            <IconButton href={this.props.restaurant.url!}>
+                                <HomeIcon/>                                
+                            </IconButton>
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" component="div"> 
