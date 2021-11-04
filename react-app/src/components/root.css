@@ -1,0 +1,9 @@
+/* * {
+    font-family: 'OpenSans';
+}
+@font-face {
+    font-family: 'OpenSans';
+    src: local('OpenSans'), url(./fonts/OpenSans-VariableFont_wdth,wght.ttf) format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' 
+  } */
