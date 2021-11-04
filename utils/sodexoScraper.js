@@ -27,11 +27,13 @@ function mapDataToStandard(restaurantData, language) {
     // determine monday date as we get start and end of week as string
     const weekStart = createDateFromDotDate(`${restaurantData.data.timeperiod.split('-')[0].trim()}2021`);
     return restaurantData.data.mealdates.map((element, index) => {
+        console.log(weekStart.getDate());
         const mealDay = {
             day: element.date,
-            date: new Date(weekStart.getDate()+index),
+            date: new Date(),
             menu: []
         }
+        mealDay.date.setDate(weekStart.getDate()+index)
         Object.entries(element.courses).forEach(([key, value]) => {
             const mealElement = value;
             mealDay.menu.push({

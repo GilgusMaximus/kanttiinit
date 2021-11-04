@@ -44,9 +44,10 @@ function mapDataToStandard(restaurantData, language) {
     return restaurantData.map((element, index) => {
         const dayMeals = {
             day: element.day.split('\n')[1].trim(),
-            date: new Date(currentDate.setDate(currentDate.getDate()+(index-currentDate.getDay()+1))),
+            date: new Date(),
             menu: []
         }
+        dayMeals.date.setDate(currentDate.getDate()+(index-currentDate.getDay()+1))
         element.meals.forEach((mealElement, mealIndex) => {
             const mealSplit = mealElement.split('/')
             if(mealSplit.length === 1) {
