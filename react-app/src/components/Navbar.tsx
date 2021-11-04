@@ -16,7 +16,7 @@ export default function ButtonAppBar() {
     }
 
     return (
-        <Box sx={{flexGrow: 1}}>
+        <Box sx={{flexGrow: 6}}>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
@@ -28,11 +28,14 @@ export default function ButtonAppBar() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    {currentDates.map((x) => (
-                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                            {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " +  ([x.getUTCDate(), x.getUTCMonth()+1].join('-'))}
-                        </Typography>
-                    ))}
+                    <div id="date-buttons">
+                        {currentDates.map((x) => (
+                            <Button className="date-button" id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
+                                    variant="contained">
+                                {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
+                            </Button>
+                        ))}
+                    </div>
                     <Button color="inherit">
                         <AccountCircle/>
                     </Button>
