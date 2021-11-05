@@ -12,7 +12,7 @@ import { Box } from '@mui/system';
 // TODO clean
 
 
-const drawerWidth = 30;
+const drawerWidth = 35;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;

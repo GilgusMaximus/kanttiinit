@@ -35,11 +35,6 @@ class Restaurant extends React.Component<
                                     </div>
                                 </Grid>
                                 <Grid item>
-                                    {/* <IconButton href={this.props.restaurant.url!}>
-                                        <HomeIcon fontSize="inherit"/>                                
-                                    </IconButton> */}
-                                </Grid>
-                                <Grid item>
                                     rating
                                 </Grid>
                                 <Grid item>
