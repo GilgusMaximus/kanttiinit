@@ -56,7 +56,15 @@ class MealDrawer extends React.Component<{
                         restaurant={this.props.restaurant}
                         onDrawerClose={this.props.onDrawerClose} />
                 </DrawerHeader>
-                <Divider />
+                <br />
+                <div style={{ color: "#FFFFFF" }}>
+                    <p>Lunch 1:</p>
+                    <ul>
+                        <li>Coffee</li>
+                        <li>Tea</li>
+                        <li>Milk</li>
+                    </ul>  
+                </div>
             </Drawer>
         );
    }
