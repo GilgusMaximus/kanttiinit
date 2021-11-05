@@ -30,9 +30,9 @@ class Requests {
             });
     }
 
-    static fetchMeals = async (restaurant: string) => {
-        return await this.fetchUrl(`/restaurants/${restaurant}/meals`)
-    }
+    // static fetchMeals = async (restaurant: string) => {
+    //     return await this.fetchUrl(`/restaurants/${restaurant}/meals`)
+    // }
 }
 
 export default Requests
