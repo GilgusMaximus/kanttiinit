@@ -20,13 +20,13 @@ const datastore = require('../db/datastore')
  */
 
 scrapeAllData = async () => {
-    // await datastore.clearWeeklyMeals().then(async () => {
-    //      await console.log(" ---------- MEALS EMPTIED ------------- ")
-    // })
-    // createMaukasMeals()
-    // createTaffaMeals()
-    // createFazerMeals()
-    // createSodexoMeals()
+    await datastore.clearWeeklyMeals().then(async () => {
+        await console.log(" ---------- MEALS EMPTIED ------------- ")
+    })
+    createMaukasMeals()
+    createTaffaMeals()
+    createFazerMeals()
+    createSodexoMeals()
 }
 
 const createRestaurantMeals = (restaurantName, scrapeFunc) => {
@@ -34,13 +34,25 @@ const createRestaurantMeals = (restaurantName, scrapeFunc) => {
     scrapeFunc.then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
-            day.menu.forEach(async (meal) => {
-                await datastore.createMeal(restaurantName, meal.Name, meal.Diets).then(async r => {
-                    // meal created if had not existed beforehand
-                    await datastore.copyMealWeekly(r, day.date).then(async m => {
-                        // console.log(m)
+            day.menu.forEach((menu) => {
+                if (!menu.Meals) {
+                    menu.menu.forEach(async (meal) => {
+                        await datastore.createMeal(restaurantName, meal.Name, meal.Diets, menu.Name).then(async r => {
+                            await datastore.copyMealWeekly(r, day.date, menu.Name).then(async m => {
+
+                            })
+                        })
                     })
-                })
+                } else {
+                    menu.Meals.forEach(async (meal) => {
+                            await datastore.createMeal(restaurantName, meal.Name, meal.Diets, menu.Name).then(async r => {
+                                await datastore.copyMealWeekly(r, day.date, menu.Name).then(async m => {
+
+                                })
+                            })
+                        }
+                    )
+                }
             })
         })
     })
@@ -53,12 +65,10 @@ const createFazerMeal = (restaurantName, scrapeFunc) => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
             day.menu.forEach((menu) => {
-                // await datastore.createMenu(restaurantName, menu)
                 menu.Meals.forEach(async (m) => {
                     await datastore.createMeal(restaurantName, m.Name, m.Diets).then(async r => {
-                        // meal created if had not existed beforehand
-                        await datastore.copyMealWeekly(r, day.date).then(async response => {
-                            // console.log(response)
+                        await datastore.copyMealWeekly(r, day.date, menu.Name).then(async response => {
+
                         })
                     })
                 })

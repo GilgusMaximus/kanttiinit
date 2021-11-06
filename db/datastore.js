@@ -163,7 +163,7 @@ const getMealExisting = async (restaurant, mealName) => {
 }
 
 
-const copyMealWeekly = async (mealEntity, date) => {
+const copyMealWeekly = async (mealEntity, date, category) => {
     const key = datastore.key(mealWeeklyKind)
     const meal = {
         'name': mealEntity.name,
@@ -171,6 +171,7 @@ const copyMealWeekly = async (mealEntity, date) => {
         'allergies': mealEntity.allergies,
         'rating': mealEntity.rating,
         'url': mealEntity.url,
+        'category': category,
         'date': date,
     }
 
