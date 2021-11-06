@@ -64,10 +64,11 @@ const createFazerMeal = (restaurantName, scrapeFunc) => {
     scrapeFunc.then(response => {
         response.sort((a, b) => a.date > b.date ? 1 : -1)
         response.forEach((day) => {
-            day.menu.forEach((menu) => {
+            day.menu.forEach((menu, i) => {
                 menu.Meals.forEach(async (m) => {
                     await datastore.createMeal(restaurantName, m.Name, m.Diets).then(async r => {
-                        await datastore.copyMealWeekly(r, day.date, menu.Name).then(async response => {
+                        let category = menu.Name || `Lunch ${i+1}`
+                        await datastore.copyMealWeekly(r, day.date, category).then(async response => {
 
                         })
                     })
