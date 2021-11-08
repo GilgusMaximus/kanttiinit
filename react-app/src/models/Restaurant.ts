@@ -21,10 +21,10 @@ export class Restaurant {
         this.pricing = jsonObj.pricing;
         this.url = jsonObj.url;
 
-        for (let name in jsonObj.meals!) {
-          console.log(name, typeof jsonObj.meals[name]);
-          // this.meals.push(new Meal(name, jsonObj.meals[name]));
-        }
+        if (jsonObj.meals)
+          this.meals = jsonObj.meals.map(
+            (meal: Meal) => new Meal(meal)
+          );
       }
     }
   }

@@ -43,7 +43,7 @@ class Restaurant extends React.Component<
                             </Grid>
                             {/* Meals */}
                             <Grid item>
-                                <Meals />
+                                <Meals restaurant={this.props.restaurant} />
                             </Grid>
                         </Grid>
                     </CardContent>
