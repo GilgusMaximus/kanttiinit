@@ -2,23 +2,39 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import { styled, useTheme } from "@mui/material/styles";
 
-import Request from '../Requests'
+const NDAYS = 7;
 
-class Navbar extends React.Component<{ mealsDay: any }, { day: Date }> {
-    state = {day: new Date()};
+type onSelectMealsDayType = (day: Date) => void;
+
+class Bar extends React.Component<
+    { onSelectMealsDay: onSelectMealsDayType },
+    { currentDates: Date[] }> {
+
+    state = { currentDates: [new Date()] };
+
+    componentDidMount() {
+        let currentDatesArray = []
+        for (let i = 0; i < NDAYS; i++) {
+            currentDatesArray.push(new Date(Date.now() + i * 24 * 60 * 60 * 1000))
+        }
+        this.setState({currentDates: currentDatesArray});
+        console.log(this.state.currentDates);
+    }
+
+    handleSelectMealsDay = (day: Date) => {
+        this.props.onSelectMealsDay(day);
+    }
+
 
     render() {
-        let currentDates = []
-        for (let i = 0; i < 7; i++) {
-            currentDates.push(new Date(Date.now() + i * 24 * 60 * 60 * 1000))
-        }
-
+        
         return (
             <Box sx={{flexGrow: 6}}>
                 <AppBar position="static">
@@ -33,16 +49,12 @@ class Navbar extends React.Component<{ mealsDay: any }, { day: Date }> {
                             <MenuIcon/>
                         </IconButton>
                         <div id="date-buttons">
-                            {currentDates.map((x) => (
-                                <Button className="date-button" id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
-                                        variant="contained"
-                                        onClick={() => {
-                                            // return this.setState({day: x})
-                                            //     , () => {
-                                                // callback function
-                                                this.props.mealsDay(Request.fetchMealsDate(x))
-                                            // }
-                                        }}
+                            {this.state.currentDates.map((x) => (
+                                <Button
+                                    className="date-button"
+                                    id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
+                                    variant="contained"
+                                    onClick={() => {this.handleSelectMealsDay(x);}}
                                 >
                                     {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
                                 </Button>
@@ -57,6 +69,29 @@ class Navbar extends React.Component<{ mealsDay: any }, { day: Date }> {
         );
     }
 }
+
+
+interface AppBarProps extends MuiAppBarProps {
+    open?: boolean;
+    drawerWidth?: number;
+}
+  
+const Navbar = styled(Bar, {
+    shouldForwardProp: (prop) => prop !== "open" && prop !== "drawerWidth" 
+    })<AppBarProps>(({ theme, open, drawerWidth }) => ({
+    transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+    }),
+    ...(open && {
+        width: `calc(100% - ${drawerWidth}vw)`,
+        transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+        }),
+        marginRight: drawerWidth+'vw'
+    })
+}));
 
 
 export default Navbar

@@ -1,24 +1,35 @@
 import React from 'react'
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Meal from './Meal';
+import { Grid } from '@mui/material';
 
-type Props = {
-    meals: any[]
-}
-
-const Meals: React.FC<Props> = ({ meals }) => {
-    return (
-        <div>
-            <Stack direction="row" spacing={2}
-                   divider={<Divider orientation="vertical" flexItem/>}
+class Meals extends React.Component {
+    render() {
+        return (
+            <Grid container item spacing={2} 
+                direction="row"
+                alignItems="flex-start"
             >
-                {meals.map((m, index) => (
-                    <Meal key={index} meal={m}/>
-                ))}
-            </Stack>
-        </div>
-    )
+                <Grid item xs={1}> 
+                    {/* Just padding */}
+                </Grid>
+                <Grid item> 
+                    <Meal />
+                </Grid>
+                <Grid item>
+                    <Meal />
+                </Grid>
+            </Grid>
+            /* <div>
+                <Stack direction="row" spacing={2}
+                       divider={<Divider orientation="vertical" flexItem/>}
+                >
+                    {meals.map((m, index) => (
+                        <Meal key={index} meal={m}/>
+                    ))}
+                </Stack>
+            </div> */
+        );
+    }
 }
 
 export default Meals

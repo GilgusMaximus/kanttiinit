@@ -1,31 +1,53 @@
 import React from 'react';
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
-import { Grid, Button, Card, CardContent, Typography}  from '@mui/material';
+import Meals from './Meals';
+import { Grid, CardActionArea, Card, CardContent, Typography, IconButton}  from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-class Restaurant extends React.Component<{ restaurant: RestaurantModel }> {
+
+type onSelectRestaurantType = (sideBarState: boolean, openRestaurant: RestaurantModel) => void;
+
+class Restaurant extends React.Component<
+    { restaurant: RestaurantModel, onSelectRestaurant: onSelectRestaurantType },
+    {}> {
+    
+    handleRestaurantSelection = () => {
+        this.props.onSelectRestaurant(true, this.props.restaurant);
+    }
+
     render() {    
         return (
             <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4}}>
-                <CardContent>
-                    <Grid container spacing={2} direction="row">
-                        <Grid item>
-                            <Typography variant="h4" component="div"> 
-                                {this.props.restaurant.name}
-                            </Typography>
+                <CardActionArea onClick={this.handleRestaurantSelection}>
+                    <CardContent>
+                        <Grid container spacing={2} direction="column">
+                            {/* Header */}
+                            <Grid container item spacing={2} direction="row" alignItems="flex-start">
+                                <Grid item>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexWrap: 'wrap',
+                                    }}>
+                                        <ChevronRightIcon fontSize="inherit" />
+                                        {this.props.restaurant.name}
+                                    </div>
+                                </Grid>
+                                <Grid item>
+                                    rating
+                                </Grid>
+                                <Grid item>
+                                    price
+                                </Grid>
+                            </Grid>
+                            {/* Meals */}
+                            <Grid item>
+                                <Meals />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button href={this.props.restaurant.url!}>
-                                <HomeIcon onClick={event =>  window.location.href=this.props.restaurant.url!} />                                
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h4" component="div"> 
-                                {this.props.restaurant.pricing}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </CardContent>
+                    </CardContent>
+                </CardActionArea>
             </Card>
         );
     }
