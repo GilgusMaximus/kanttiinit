@@ -7,7 +7,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 
 type onDrawerCloseType = () => void;
 
-class MealDrawerHeader extends React.Component<{
+class RestaurantDrawerHeader extends React.Component<{
     restaurant: RestaurantModel,
     onDrawerClose: onDrawerCloseType,
     },
@@ -92,4 +92,4 @@ class MealDrawerHeader extends React.Component<{
    }
 }
 
-export default MealDrawerHeader
+export default RestaurantDrawerHeader

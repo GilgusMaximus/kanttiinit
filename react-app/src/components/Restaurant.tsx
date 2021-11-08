@@ -18,7 +18,7 @@ class Restaurant extends React.Component<
 
     render() {    
         return (
-            <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4}}>
+            <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4, color: '#143642'}}>
                 <CardActionArea onClick={this.handleRestaurantSelection}>
                     <CardContent>
                         <Grid container spacing={2} direction="column">
