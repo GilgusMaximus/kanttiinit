@@ -14,12 +14,21 @@ const theme = createTheme({
    },});
 
 class App extends Component {
+    state = {
+        day: new Date()
+    }
+
+    getMealsDay = (mealVal: any) => {
+        this.setState({mealsDay: mealVal}, () => {
+            console.log(mealVal)
+        })
+    }
 
     render() {
         return (
             <ThemeProvider theme={theme}>
             <div className="App">
-                <Navbar/>
+                <Navbar mealsDay={this.getMealsDay}/>
                 {/* <RightDrawer meals={this.state.res}/> */}
                 <Restaurants/>
             </div>
