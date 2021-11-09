@@ -1,9 +1,10 @@
-import { Grid, Box, IconButton, Typography, Divider } from '@mui/material';
 import * as React from 'react';
+import { Grid, IconButton, Typography, Divider } from '@mui/material';
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import PlaceIcon from '@mui/icons-material/Place';
+import Price from './Price';
 
 type onDrawerCloseType = () => void;
 
@@ -58,7 +59,7 @@ class RestaurantDrawerHeader extends React.Component<{
                                 background: "#FFFFFF",
                                 border: `1px solid #FFFFFF`,
                                 borderRadius: 1,
-                                height: '2vw',
+                                height: '25px',
                             }}
                             orientation="vertical" 
                             variant="middle"
@@ -66,7 +67,7 @@ class RestaurantDrawerHeader extends React.Component<{
                         />
                     </Grid>
                     <Grid item>
-                        <Typography>price</Typography>
+                        <Price restaurant={this.props.restaurant} />
                     </Grid>
                 </Grid>
 
