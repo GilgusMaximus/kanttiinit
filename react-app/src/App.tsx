@@ -6,9 +6,11 @@ import Navbar from './components/Navbar'
 import Restaurants from './components/Restaurants'
 import RestaurantDrawer from "./components/RestaurantDrawer";
 import { Restaurant as RestaurantModel} from './models/Restaurant'
+import { Restaurants as RestaurantsModel} from './models/Restaurants'
 import { CssBaseline, Drawer, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Requests from "./Requests";
 
 
 const theme = createTheme({
@@ -43,15 +45,29 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 class App extends Component<{}, { sideBarState: boolean, openRestaurant: RestaurantModel }> {
 
     state = {
-        day: new Date(),
-        sideBarState: true,
+        date: new Date(),
+        sideBarState: false,
         openRestaurant: new RestaurantModel(),
+        restaurantList: new RestaurantsModel(),
     };
 
-    handleChangeMealsDay = (mealDay: Date) => {
+    componentDidMount() {
+      this.updateRestaurantData();
+    }
+
+    updateRestaurantData() {
+      Requests.fetchRestaurantsByDate(this.state.date).then((response: RestaurantsModel) => {
         let prevState = {...this.state};
-        prevState.day = mealDay;
+        prevState.restaurantList = response;
         this.setState(prevState);
+        console.log(prevState);
+      });
+    }
+
+    handleChangeMealsDate = (mealdate: Date) => {
+        let prevState = {...this.state};
+        prevState.date = mealdate;
+        this.setState(prevState, this.updateRestaurantData);
         console.log(prevState);
     }
 
@@ -79,9 +95,11 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                           position="fixed"
                           open={this.state.sideBarState}
                           drawerWidth={drawerWidth}  
-                          onSelectMealsDay={this.handleChangeMealsDay}
+                          onSelectMealsDate={this.handleChangeMealsDate}
                         />
-                        <Restaurants onSelectRestaurant={this.handleSideBarState}/>
+                        <Restaurants
+                          restaurants={this.state.restaurantList}
+                          onSelectRestaurant={this.handleSideBarState}/>
                     </Main>
                     
                     <RestaurantDrawer
