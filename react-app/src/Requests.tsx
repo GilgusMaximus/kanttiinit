@@ -31,7 +31,7 @@ class Requests {
     }
 
     static async fetchRestaurantsByDate(date: Date): Promise<Restaurants> {
-        return this.fetchUrl('/restaurants?date='+[date.getUTCDate(), date.getUTCMonth() + 1, date.getUTCFullYear()].join('-'))
+        return this.fetchUrl('/restaurants?day='+[date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()].join('-'))
             .then((response) => {
                 return new Restaurants(response);
             });
