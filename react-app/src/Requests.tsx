@@ -30,6 +30,13 @@ class Requests {
             });
     }
 
+    static async fetchRestaurantsByDate(date: Date): Promise<Restaurants> {
+        return this.fetchUrl('/restaurants?date='+[date.getUTCDate(), date.getUTCMonth() + 1, date.getUTCFullYear()].join('-'))
+            .then((response) => {
+                return new Restaurants(response);
+            });
+    }
+
     static fetchMeals = async (restaurant: string) => {
         return await Requests.fetchUrl(`/restaurants/${restaurant}/meals`)
     }
