@@ -46,7 +46,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
 
     state = {
         date: new Date(),
-        sideBarState: true,
+        sideBarState: false,
         openRestaurant: new RestaurantModel(),
         restaurantList: new RestaurantsModel(),
     };
