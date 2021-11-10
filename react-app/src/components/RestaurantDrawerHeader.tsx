@@ -1,13 +1,15 @@
-import { Grid, Box, IconButton, Typography, Divider } from '@mui/material';
 import * as React from 'react';
+import { Grid, IconButton, Typography, Divider } from '@mui/material';
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import PlaceIcon from '@mui/icons-material/Place';
+import Price from './Price';
+import Rating from './Rating';
 
 type onDrawerCloseType = () => void;
 
-class MealDrawerHeader extends React.Component<{
+class RestaurantDrawerHeader extends React.Component<{
     restaurant: RestaurantModel,
     onDrawerClose: onDrawerCloseType,
     },
@@ -50,7 +52,11 @@ class MealDrawerHeader extends React.Component<{
                     spacing={1}
                 >
                     <Grid item>
-                        <Typography>rating</Typography>
+                        <Rating 
+                            restaurant={this.props.restaurant}
+                            allowSubmission={true} 
+                            color='#FFFFFF'
+                        />
                     </Grid>
                     <Grid item>
                         <Divider 
@@ -58,7 +64,7 @@ class MealDrawerHeader extends React.Component<{
                                 background: "#FFFFFF",
                                 border: `1px solid #FFFFFF`,
                                 borderRadius: 1,
-                                height: '2vw',
+                                height: '25px',
                             }}
                             orientation="vertical" 
                             variant="middle"
@@ -66,7 +72,7 @@ class MealDrawerHeader extends React.Component<{
                         />
                     </Grid>
                     <Grid item>
-                        <Typography>price</Typography>
+                        <Price restaurant={this.props.restaurant} />
                     </Grid>
                 </Grid>
 
@@ -92,4 +98,4 @@ class MealDrawerHeader extends React.Component<{
    }
 }
 
-export default MealDrawerHeader
+export default RestaurantDrawerHeader

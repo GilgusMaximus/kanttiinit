@@ -1,8 +1,9 @@
 import React from 'react'
 import Meal from './Meal';
 import { Grid } from '@mui/material';
+import { Restaurant as RestaurantModel} from '../models/Restaurant'
 
-class Meals extends React.Component {
+class Meals extends React.Component<{ restaurant: RestaurantModel }> {
     render() {
         return (
             <Grid container item spacing={2} 
@@ -12,22 +13,13 @@ class Meals extends React.Component {
                 <Grid item xs={1}> 
                     {/* Just padding */}
                 </Grid>
-                <Grid item> 
-                    <Meal />
-                </Grid>
-                <Grid item>
-                    <Meal />
-                </Grid>
-            </Grid>
-            /* <div>
-                <Stack direction="row" spacing={2}
-                       divider={<Divider orientation="vertical" flexItem/>}
-                >
-                    {meals.map((m, index) => (
+
+                {this.props.restaurant.meals.map((m, index) => (
+                    <Grid item> 
                         <Meal key={index} meal={m}/>
-                    ))}
-                </Stack>
-            </div> */
+                    </Grid>
+                ))}
+            </Grid>
         );
     }
 }

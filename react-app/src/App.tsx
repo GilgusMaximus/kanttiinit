@@ -4,7 +4,7 @@ import './components/root.css';
 import { styled, useTheme } from "@mui/material/styles";
 import Navbar from './components/Navbar'
 import Restaurants from './components/Restaurants'
-import MealDrawer from "./components/MealDrawer";
+import RestaurantDrawer from "./components/RestaurantDrawer";
 import { Restaurant as RestaurantModel} from './models/Restaurant'
 import { CssBaseline, Drawer, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
@@ -44,7 +44,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
 
     state = {
         day: new Date(),
-        sideBarState: false,
+        sideBarState: true,
         openRestaurant: new RestaurantModel(),
     };
 
@@ -84,7 +84,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         <Restaurants onSelectRestaurant={this.handleSideBarState}/>
                     </Main>
                     
-                    <MealDrawer
+                    <RestaurantDrawer
                         open={this.state.sideBarState}
                         restaurant={this.state.openRestaurant}
                         drawerWidth={drawerWidth}
