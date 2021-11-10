@@ -27,7 +27,6 @@ const getAllRestaurantsAndMeals = async (date) => {
         rests.forEach(x => x["meals"] = [])
         if (date) {
             return await getWeeklyMealsDate(date).then(meals => {
-                console.log(meals.length)
                 let obj = {}
                 meals.forEach(meal => {
                     if (meal.restaurant in obj) {
@@ -40,6 +39,7 @@ const getAllRestaurantsAndMeals = async (date) => {
                 return rests
             })
         } else {
+            // use today as date if no argument was given
             return await getWeeklyMealsDate(dateFormat(new Date())).then(meals => {
                 let obj = {}
                 meals.forEach(meal => {
