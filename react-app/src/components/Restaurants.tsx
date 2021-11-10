@@ -35,7 +35,7 @@ class Restaurants extends React.Component<{ onSelectRestaurant: onSelectRestaura
                 <Grid container spacing={2} direction="column" width="98%">
                     {this.state.restaurantList.list.map((res, index) => (
                         <Grid item key={index} sm={4}>
-                            <Restaurant restaurant={res} onSelectRestaurant={this.props.onSelectRestaurant}/>
+                            <Restaurant key={index} restaurant={res} onSelectRestaurant={this.props.onSelectRestaurant}/>
                         </Grid>
                     ))}
                 </Grid>
