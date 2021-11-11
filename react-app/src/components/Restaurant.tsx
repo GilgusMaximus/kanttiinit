@@ -19,7 +19,7 @@ class Restaurant extends React.Component<
     render() {    
         return (
             <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4, color: '#143642', minHeight: 200}}>
-                <CardActionArea onClick={this.handleRestaurantSelection}>
+                <CardActionArea onClick={this.handleRestaurantSelection} sx={{minHeight: 200}}>
                     <CardContent>
                         <Grid container spacing={2} direction="column">
                             {/* Header */}
