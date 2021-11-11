@@ -4,6 +4,7 @@ import Meals from './Meals';
 import { Grid, CardActionArea, Card, CardContent, Divider}  from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Price from './Price';
+import Rating from './Rating';
 
 
 type onSelectRestaurantType = (sideBarState: boolean, openRestaurant: RestaurantModel) => void;
@@ -35,7 +36,11 @@ class Restaurant extends React.Component<
                                     </div>
                                 </Grid>
                                 <Grid item>
-                                    rating
+                                    <Rating 
+                                        restaurant={this.props.restaurant}
+                                        allowSubmission={false} 
+                                        color='#143642'
+                                    />
                                 </Grid>
                                 <Grid item>
                                     <Divider 

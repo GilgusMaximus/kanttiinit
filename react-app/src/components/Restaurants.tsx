@@ -5,25 +5,13 @@ import { Restaurants as RestaurantsModel} from '../models/Restaurants'
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
 import Requests from "../Requests";
 
-// const RestaurantWrapper = styled(Paper)(({theme}) => ({
-//     ...theme.typography.body2,
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-// }));
-
 type onSelectRestaurantType = (sideBarState: boolean, openRestaurant: RestaurantModel) => void;
 
-class Restaurants extends React.Component<{ onSelectRestaurant: onSelectRestaurantType }, { restaurantList: RestaurantsModel }> {
-    state = { restaurantList: new RestaurantsModel() };
+class Restaurants extends React.Component<
+    { restaurants: RestaurantsModel, onSelectRestaurant: onSelectRestaurantType },
+    {}
+> {
 
-    componentDidMount() {
-        Requests.fetchRestaurants().then(response => {
-            console.log("IN FETCHING", response);
-            this.setState({ restaurantList: response });
-        })
-    }
-    
     render() {
         return (
             <Box
@@ -33,9 +21,9 @@ class Restaurants extends React.Component<{ onSelectRestaurant: onSelectRestaura
                 py={2}
             >
                 <Grid container spacing={2} direction="column" width="98%">
-                    {this.state.restaurantList.list.map((res, index) => (
+                    {this.props.restaurants.list.map((res, index) => (
                         <Grid item key={index} sm={4}>
-                            <Restaurant restaurant={res} onSelectRestaurant={this.props.onSelectRestaurant}/>
+                            <Restaurant key={index} restaurant={res} onSelectRestaurant={this.props.onSelectRestaurant}/>
                         </Grid>
                     ))}
                 </Grid>

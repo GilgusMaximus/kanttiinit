@@ -5,6 +5,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import PlaceIcon from '@mui/icons-material/Place';
 import Price from './Price';
+import Rating from './Rating';
 
 type onDrawerCloseType = () => void;
 
@@ -51,7 +52,11 @@ class RestaurantDrawerHeader extends React.Component<{
                     spacing={1}
                 >
                     <Grid item>
-                        <Typography>rating</Typography>
+                        <Rating 
+                            restaurant={this.props.restaurant}
+                            allowSubmission={true} 
+                            color='#FFFFFF'
+                        />
                     </Grid>
                     <Grid item>
                         <Divider 

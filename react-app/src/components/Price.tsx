@@ -9,9 +9,9 @@ class Price extends React.Component<{ restaurant: RestaurantModel }, {}>{
         var icons = [];
         for(let i = 0; i < N_ICONS; i++) {
             if (i < this.props.restaurant.pricing! )
-                icons.push(<AttachMoneyIcon fontSize='inherit' />)
+                icons.push(<AttachMoneyIcon fontSize='small' />)
             else
-                icons.push(<AttachMoneyIcon color='disabled' fontSize='inherit' />)
+                icons.push(<AttachMoneyIcon color='disabled' fontSize='small' />)
         }
 
         return(

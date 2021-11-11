@@ -11,10 +11,10 @@ import { styled, useTheme } from "@mui/material/styles";
 
 const NDAYS = 7;
 
-type onSelectMealsDayType = (day: Date) => void;
+type onSelectMealsDateType = (day: Date) => void;
 
 class Bar extends React.Component<
-    { onSelectMealsDay: onSelectMealsDayType },
+    { onSelectMealsDate: onSelectMealsDateType },
     { currentDates: Date[] }> {
 
     state = { currentDates: [new Date()] };
@@ -29,7 +29,7 @@ class Bar extends React.Component<
     }
 
     handleSelectMealsDay = (day: Date) => {
-        this.props.onSelectMealsDay(day);
+        this.props.onSelectMealsDate(day);
     }
 
 
