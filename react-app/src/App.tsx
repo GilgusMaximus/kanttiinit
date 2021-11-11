@@ -16,7 +16,8 @@ import Requests from "./Requests";
 const theme = createTheme({
     typography: {
       fontFamily: [
-        'Open Sans'
+        'Open Sans',
+        'sans-serif'
       ].join(','),
    },});
 
