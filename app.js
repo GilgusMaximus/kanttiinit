@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'react-app/build')));
 
 app.use('/', indexRouter);
 app.use('/restaurants', restaurantRouter);
-app.use('/:meal/image/', mealRouter)
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

@@ -102,7 +102,6 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         <Restaurants
                           restaurants={this.state.restaurantList}
                           onSelectRestaurant={this.handleSideBarState}/>
-                        <ImageUpload></ImageUpload>
                     </Main>
                     
                     <RestaurantDrawer
