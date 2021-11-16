@@ -173,9 +173,10 @@ const copyMealWeekly = async (mealEntity, date) => {
         'date': date,
     }
 
-    datastore.insert({key: key, data: meal}).then(r => {
-        // inserted successfully
-    })
+    return meal
+    // datastore.insert({key: key, data: meal}).then(r => {
+    //     // inserted successfully
+    // })
 }
 
 const getWeeklyMeals = async () => {
@@ -192,25 +193,12 @@ const clearWeeklyMeals = async () => {
 }
 
 
-const createMenu = async (restaurant, menu) => {
-    let m = await getMenuExisting(restaurant, menu)
+const createMenu = async (menu, name) => {
+    const key = datastore.key(mealWeeklyKind);
 
-    if (m) { // menu already exists
-        return m
-    }
+    console.log("Adding new menu: ", menu)
 
-    const key = datastore.key(mealArchiveKind);
-    const meal = {
-        'name': mealName,
-        'restaurant': restaurant,
-        'allergies': allergies,
-        'rating': [],
-        'url': [],
-    }
-
-    console.log("Adding new meal: ", mealName)
-
-    return datastore.insert({key: key, data: meal}).then(async m => {
+    return datastore.insert({key: key, data: menu}).then(async m => {
         const [entity] = await datastore.get(key)
         return entity
     })
@@ -226,7 +214,13 @@ const createMeal = async (restaurant, mealName, allergies) => {
     // TODO: check if meal exists first
     if (m) { // meal already exists
         console.log("Meal already exists: ", m.name)
-        return m
+        let menu =  {
+            'name': mealName,
+            'restaurant': restaurant,
+            'allergies': allergies,
+            'url': m.url,
+        }
+        return menu
     }
 
     const key = datastore.key(mealArchiveKind);
@@ -234,7 +228,6 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'name': mealName,
         'restaurant': restaurant,
         'allergies': allergies,
-        'rating': [],
         'url': [],
     }
 
@@ -242,8 +235,9 @@ const createMeal = async (restaurant, mealName, allergies) => {
 
     return datastore.insert({key: key, data: meal}).then(async m => {
         const [entity] = await datastore.get(key)
-        return entity
+        // return entity
     })
+    return meal
 }
 
 
@@ -301,4 +295,5 @@ module.exports = {
     getAllRestaurantsAndMeals,
     getWeeklyMealsDate,
     getWeeklyMealsDateRestaurant,
+    createMenu
 }

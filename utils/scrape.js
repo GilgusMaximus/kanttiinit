@@ -21,51 +21,72 @@ const datastore = require('../db/datastore')
 
 scrapeAllData = async () => {
     await datastore.clearWeeklyMeals().then(async () => {
-         await console.log(" ---------- MEALS EMPTIED ------------- ")
+        await console.log(" ---------- MEALS EMPTIED ------------- ")
     })
-    createMaukasMeals()
-    createTaffaMeals()
+    // createMaukasMeals()
+    // createTaffaMeals()
     createFazerMeals()
-    createSodexoMeals()
+    // createSodexoMeals()
 }
 
-const createRestaurantMeals = (restaurantName, scrapeFunc) => {
-    // go through each restaurant done later. for now only work with one restaurant
-    scrapeFunc.then(response => {
-        response.sort((a, b) => a.date > b.date ? 1 : -1)
-        response.forEach((day) => {
-            day.menu.forEach(async (meal) => {
-                await datastore.createMeal(restaurantName, meal.Name, meal.Diets).then(async r => {
-                    // meal created if had not existed beforehand
-                    await datastore.copyMealWeekly(r, day.date).then(async m => {
-                        // console.log(m)
-                    })
-                })
-            })
-        })
-    })
-}
+// const createRestaurantMeals = (restaurantName, scrapeFunc) => {
+//     // go through each restaurant done later. for now only work with one restaurant
+//     scrapeFunc.then(response => {
+//         response.sort((a, b) => a.date > b.date ? 1 : -1)
+//         response.forEach((day) => {
+//             day.menu.forEach(async (meal) => {
+//
+//                 menuMeals = []
+//                 menuName = meal.Name
+//
+//                 await datastore.createMeal(restaurantName, meal.Name, meal.Diets).then(async r => {
+//                     menuMeals.push(r)
+//                     console.log(r)
+//                 })
+//             })
+//
+//             datastore.createMenu(menuMeals, menuName).then(r => {
+//                 //
+//             })
+//         })
+//     })
+// }
+
+
+// )
+// }
 
 
 const createFazerMeal = (restaurantName, scrapeFunc) => {
     // go through each restaurant done later. for now only work with one restaurant
     scrapeFunc.then(response => {
-        response.sort((a, b) => a.date > b.date ? 1 : -1)
-        response.forEach((day) => {
-            day.menu.forEach((menu) => {
-                // await datastore.createMenu(restaurantName, menu)
-                menu.Meals.forEach(async (m) => {
-                    await datastore.createMeal(restaurantName, m.Name, m.Diets).then(async r => {
-                        // meal created if had not existed beforehand
-                        await datastore.copyMealWeekly(r, day.date).then(async response => {
-                            // console.log(response)
+            response.sort((a, b) => a.date > b.date ? 1 : -1)
+            response.forEach((day) => {
+                day.menu.forEach((menu) => {
+
+                    menuMeals = []
+                    menuName = menu.Name
+
+
+                    let promise = menu.Meals.map((m, index) => {
+                        return datastore.createMeal(restaurantName, m.Name, m.Diets)
+                            .then(r => {
+                                menuMeals.push(r)
+                            })
+                    })
+
+                    Promise.all(promise).then(() => {
+                        datastore.createMenu(menuMeals, menuName).then(r => {
+                            //
                         })
                     })
                 })
             })
-        })
-    })
+        }
+    )
 }
+// )
+// }
 
 const createMaukasMeals = () => {
     createRestaurantMeals('Mau-kas', maukas('en'))
