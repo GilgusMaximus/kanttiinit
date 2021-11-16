@@ -43,7 +43,8 @@ const createRestaurantMeals = (restaurantName, scrapeFunc) => {
                             })
                         })
                     })
-                } else {
+                }
+                else {
                     menu.Meals.forEach(async (meal) => {
                             await datastore.createMeal(restaurantName, meal.Name, meal.Diets, menu.Name).then(async r => {
                                 await datastore.copyMealWeekly(r, day.date, menu.Name).then(async m => {
