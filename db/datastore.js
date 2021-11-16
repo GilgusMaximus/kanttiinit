@@ -232,6 +232,12 @@ const createMeal = async (restaurant, mealName, allergies) => {
     }
 
     const key = datastore.key(mealArchiveKind);
+
+    if(allergies.length > 0) { // fix allergies bug
+        if(Array.isArray(allergies[0])) {
+            allergies = allergies[0]
+        }
+    }
     const meal = {
         'name': mealName,
         'restaurant': restaurant,
@@ -240,6 +246,7 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'url': [],
     }
 
+    // console.log("Adding new meal: ", mealName)
     console.log("Adding new meal: ", mealName)
 
     return datastore.insert({key: key, data: meal}).then(async m => {
