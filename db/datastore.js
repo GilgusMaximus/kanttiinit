@@ -13,7 +13,8 @@ const restKind = 'restaurants'
 const getAllRestaurants = async () => {
     const query = datastore.createQuery(restKind);
     const [rests] = await datastore.runQuery(query);
-    return rests
+    const newRests = rests.map(restaurant => ({ ...restaurant, id: restaurant[datastore.KEY].name}))
+    return newRests
 }
 
 const getRestaurant = async (name) => {
