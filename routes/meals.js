@@ -57,12 +57,12 @@ router.post("/:meal/image/", storage.multer.single('file'), function (req, res, 
 
 /* Update corresponding meal entity */
 router.post("/:meal/image/", storage.multer.single('file'), function (req, res, next) {
-    const restaurant = req.body.name;
+    const restaurant = req.restaurant
     const meal = req.params.meal;
     const url = req.file.cloudStoragePublicUrl;
 
 
-    db.addMealImage(restaurant, meal, url).then(r => {
+    db.addMealImage(restaurant, meal, url, ).then(r => {
         if (!r) {
             let err = new Error("There was a problem with the image upload.")
             err.code = 400;

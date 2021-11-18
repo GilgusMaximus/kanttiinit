@@ -74,8 +74,8 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
         const requestOptions = {
             headers: { 'Content-Type': 'multipart/form-data' }
         };
-        axios.post(`restaurants/${this.props.restaurant.id}/meals/${this.props.restaurant.meals[this.state.selectedMeal].name}/image/`, formData, requestOptions)
-        .then((response: any) => 
+        axios.post(`restaurants/${this.props.restaurant.name}/meals/${this.props.restaurant.meals[this.state.selectedMeal].name}/image/`, formData, requestOptions)
+        .then((response: any) =>
             {
                 if(response.status === 200) {
                     // Upload succeeded
@@ -97,14 +97,14 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
         })
     }
 
-    render() { 
+    render() {
         return (
                 <form onSubmit={this.handleSubmit} style={{paddingBottom: 50}}>
                     <Stack direction="column" spacing={1} alignItems="center"justifyContent="center">
                     {/* ---------------Success or Failure Display--------------- */}
                         {(this.state.successfulUpload === 1) && <Chip
-                        icon={<CheckCircleOutlineIcon sx={{fill: '#1df051'}} />} 
-                        label="Upload Successful" 
+                        icon={<CheckCircleOutlineIcon sx={{fill: '#1df051'}} />}
+                        label="Upload Successful"
                         variant="outlined"
                         sx={{
                             borderColor: '#1df051',
@@ -114,8 +114,8 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                             fontSize: 15
                         }}></Chip>}
                         {(this.state.successfulUpload === 2) && <Chip
-                        icon={<CheckCircleOutlineIcon sx={{fill: '#f01d1d'}} />} 
-                        label="Upload Failed" 
+                        icon={<CheckCircleOutlineIcon sx={{fill: '#f01d1d'}} />}
+                        label="Upload Failed"
                         variant="outlined"
                         sx={{
                             borderColor: '#f01d1d',
@@ -124,7 +124,7 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                             borderWidth: 3,
                             fontSize: 15
                         }}></Chip>}
-                        
+
                     {/* ---------------Success or Failure Display End--------------- */}
                         <Grid container spacing={2} alignItems="center"justifyContent="center">
                             <Grid item xs={'auto'}>
@@ -141,8 +141,8 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                             <Grid item xs={'auto'}>
                                 <label>
                                 <input type="file" ref={this.fileInput} hidden onChange={this.handleInputFileChange} accept="image/png, image/jpeg"/>
-                                <Button 
-                                    variant="contained" 
+                                <Button
+                                    variant="contained"
                                     onClick={this.handleButtonClick}
                                     startIcon={<ImageSearchIcon />}
                                 >Select Image for lunch option upload</Button>
@@ -150,18 +150,18 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                             </Grid>
                             <Grid item xs={'auto'}>
                                 <input type="submit" ref={this.fileSubmisson} hidden value="Upload image"/>
-                                <Button 
-                                    variant="contained" 
+                                <Button
+                                    variant="contained"
                                     onClick={this.handleSubmitButtonClick}
                                     startIcon={<FileUploadIcon />}
                                 >Upload Image</Button>
                             </Grid>
                         </Grid>
-                        
+
                     </Stack>
                 </form>
         );
     }
 }
- 
+
 export default ImageUpload;
