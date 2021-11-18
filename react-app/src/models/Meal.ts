@@ -10,4 +10,19 @@ export class Meal {
             this.url = jsonObj.url;
         }
     }
+
+    getAllergies() {
+        let str: string = ""
+        if (this.allergies) {
+            str = " - "
+            this.allergies.forEach((a, i) => {
+                str += a
+                // @ts-ignore
+                if (i != this.allergies.length - 1) {
+                    str += ", "
+                }
+            })
+        }
+        return str;
+    }
 }

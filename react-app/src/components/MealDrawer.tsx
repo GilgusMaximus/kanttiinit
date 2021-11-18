@@ -10,7 +10,7 @@ class MealDrawer extends React.Component<{ meal: MealModel }> {
                     Lunch 1:
                 </Grid>
                 <Grid item ml={4}>
-                    {this.props.meal.name}
+                    {this.props.meal.name} <em>{this.props.meal.getAllergies()}</em>
                 </Grid>
                 <Grid item>
                     {this.props.meal.url[0] ? (<img src={this.props.meal.url[0]} style={{ width: 200, margin: 10 }} />) : null}
