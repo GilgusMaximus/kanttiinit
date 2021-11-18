@@ -16,23 +16,24 @@ import Requests from "./Requests";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from "firebase/auth"
+
 import RegisterForm from './components/RegisterForm';
+import LoginForm from './components/LoginForm';
 
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
+console.log(process.env)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDG2vqhbjieTZ_1GkVvfxeW6VPb1gw9644",
-  authDomain: "kanttiinit-60c47.firebaseapp.com",
-  projectId: "kanttiinit-60c47",
-  messagingSenderId: "874462591966",
-  appId: "1:874462591966:web:ac5d49951225519e577b4f",
-  measurementId: "G-6ZMVBTJDCB"
-
+  apiKey: process.env.REACT_APP_GOOGLE_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_GOOGLE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_GOOGLE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_GOOGLE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_GOOGLE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_GOOGLE_FIREBASE_APP_ID
 };
+
+console.log(firebaseConfig)
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -113,8 +114,46 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
         this.setState(prevState);
     }
 
-    callbackFun = (text?: string) => {
-      console.log("JA MOOOOOOOOOOOIN", text);
+    registerUserCallback = (userData: {username: string, password: string}) => {
+      console.log("JA MOOOOOOOOOOOIN", userData.username, userData.password);
+      createUserWithEmailAndPassword(auth, userData.username, userData.password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log("User logged in")
+        // ...
+        })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("User not logged in", errorMessage)
+        // ..
+      });
+    }
+
+    loginUserCallback = (userData: {username: string, password: string}) => {
+      signInWithEmailAndPassword(auth, userData.username, userData.password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log("Logged in", auth.currentUser);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorMessage);
+        });
+    }
+
+    handleUserLogOut = () => {
+      console.log(auth)
+      auth.signOut().then(result => {
+        console.log("Successfully logged out")
+      }).catch(error => {
+        console.log("Error while logging out")
+      })
+      console.log(auth)
     }
 
     render() {
@@ -132,7 +171,9 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         <Restaurants
                           restaurants={this.state.restaurantList}
                           onSelectRestaurant={this.handleSideBarState}/>
-                          <RegisterForm callbackFun={this.callbackFun}></RegisterForm>
+                          <RegisterForm registerFun={this.registerUserCallback}></RegisterForm>
+                          <LoginForm loginFun={this.loginUserCallback}></LoginForm>
+                          <button onClick={this.handleUserLogOut}>Logout</button>     
                     </Main>
                     
                     <RestaurantDrawer
@@ -140,7 +181,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         restaurant={this.state.openRestaurant}
                         drawerWidth={drawerWidth}
                         onDrawerClose={this.handleDrawerClose}
-                    />               
+                    />      
                 </Box>
             </ThemeProvider>
         );

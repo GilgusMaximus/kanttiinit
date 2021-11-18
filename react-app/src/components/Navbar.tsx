@@ -5,9 +5,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { styled, useTheme } from "@mui/material/styles";
+import ProfileField from './ProfileField';
 
 const NDAYS = 7;
 
@@ -15,9 +15,9 @@ type onSelectMealsDateType = (day: Date) => void;
 
 class Bar extends React.Component<
     { onSelectMealsDate: onSelectMealsDateType },
-    { currentDates: Date[] }> {
+    { currentDates: Date[], showUserUi: boolean }> {
 
-    state = { currentDates: [new Date()] };
+    state = { currentDates: [new Date()], showUserUi: false };
 
     componentDidMount() {
         let currentDatesArray = []
@@ -60,9 +60,7 @@ class Bar extends React.Component<
                                 </Button>
                             ))}
                         </div>
-                        <Button color="inherit">
-                            <AccountCircle/>
-                        </Button>
+                        <ProfileField></ProfileField>
                     </Toolbar>
                 </AppBar>
             </Box>
