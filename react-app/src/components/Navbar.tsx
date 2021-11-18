@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { styled, useTheme } from "@mui/material/styles";
-import ProfileField from './ProfileField';
+import ProfileViewDemo from './SimpleDialog';
 
 const NDAYS = 7;
 
@@ -60,7 +60,7 @@ class Bar extends React.Component<
                                 </Button>
                             ))}
                         </div>
-                        <ProfileField></ProfileField>
+                        <ProfileViewDemo></ProfileViewDemo>
                     </Toolbar>
                 </AppBar>
             </Box>

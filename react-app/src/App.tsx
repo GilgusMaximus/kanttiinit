@@ -16,11 +16,7 @@ import Requests from "./Requests";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from "firebase/auth"
-
-import RegisterForm from './components/RegisterForm';
-import LoginForm from './components/LoginForm';
-
+import { getAuth } from "firebase/auth"
 
 console.log(process.env)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -32,8 +28,6 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_GOOGLE_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_GOOGLE_FIREBASE_APP_ID
 };
-
-console.log(firebaseConfig)
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -114,48 +108,6 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
         this.setState(prevState);
     }
 
-    registerUserCallback = (userData: {username: string, password: string}) => {
-      console.log("JA MOOOOOOOOOOOIN", userData.username, userData.password);
-      createUserWithEmailAndPassword(auth, userData.username, userData.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        console.log("User logged in")
-        // ...
-        })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("User not logged in", errorMessage)
-        // ..
-      });
-    }
-
-    loginUserCallback = (userData: {username: string, password: string}) => {
-      signInWithEmailAndPassword(auth, userData.username, userData.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          console.log("Logged in", auth.currentUser);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-        });
-    }
-
-    handleUserLogOut = () => {
-      console.log(auth)
-      auth.signOut().then(result => {
-        console.log("Successfully logged out")
-      }).catch(error => {
-        console.log("Error while logging out")
-      })
-      console.log(auth)
-    }
-
     render() {
         return (
             <ThemeProvider theme={theme}>
@@ -171,9 +123,6 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         <Restaurants
                           restaurants={this.state.restaurantList}
                           onSelectRestaurant={this.handleSideBarState}/>
-                          <RegisterForm registerFun={this.registerUserCallback}></RegisterForm>
-                          <LoginForm loginFun={this.loginUserCallback}></LoginForm>
-                          <button onClick={this.handleUserLogOut}>Logout</button>     
                     </Main>
                     
                     <RestaurantDrawer
