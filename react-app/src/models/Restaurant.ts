@@ -3,7 +3,7 @@ import { Meal } from './Meal';
 type Coordinates = {latitude: number, longitude: number};
 
 export class Restaurant {
-    id: number | null = null;
+    id: string | null = null;
     name: string | null = null;
     location: Coordinates = {latitude: 0, longitude: 0};
     pricing: number | null = null;

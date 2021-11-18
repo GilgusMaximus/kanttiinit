@@ -3,7 +3,7 @@ import { Drawer, Typography } from '@mui/material';
 import { Restaurant as RestaurantModel} from '../models/Restaurant'
 import RestaurantDrawerHeader from './RestaurantDrawerHeader'
 import RestaurantDrawerBody from './RestaurantDrawerBody'
-
+import ImageUpload from './ImageUpload';
 import { styled, useTheme } from "@mui/material/styles";
 
 type onDrawerCloseType = () => void;
@@ -49,6 +49,8 @@ class RestaurantDrawer extends React.Component<{
                 <RestaurantDrawerBody
                     restaurant={this.props.restaurant} 
                 />
+
+                <ImageUpload restaurant={this.props.restaurant}></ImageUpload>
 
             </Drawer>
         );

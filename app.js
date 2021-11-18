@@ -8,6 +8,7 @@ var scraper = require('./utils/scrape')
 
 var indexRouter = require('./routes/index');
 var restaurantRouter = require('./routes/restaurants');
+var mealRouter = require('./routes/meals');
 
 var app = express();
 

@@ -4,6 +4,7 @@ import './components/root.css';
 import { styled, useTheme } from "@mui/material/styles";
 import Navbar from './components/Navbar'
 import Restaurants from './components/Restaurants'
+import ImageUpload from './components/ImageUpload';
 import RestaurantDrawer from "./components/RestaurantDrawer";
 import { Restaurant as RestaurantModel} from './models/Restaurant'
 import { Restaurants as RestaurantsModel} from './models/Restaurants'
@@ -108,8 +109,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         restaurant={this.state.openRestaurant}
                         drawerWidth={drawerWidth}
                         onDrawerClose={this.handleDrawerClose}
-                    />                
-                    
+                    />               
                 </Box>
             </ThemeProvider>
         );
