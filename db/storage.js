@@ -11,6 +11,8 @@ const {Storage} = require('@google-cloud/storage');
 // Instantiate a storage client
 const storage = new Storage();
 
+console.log(process.env.GCLOUD_STORAGE_BUCKET)
+console.log(process.env['GCLOUD_STORAGE_BUCKET'])
 const CLOUD_BUCKET = process.env['GCLOUD_STORAGE_BUCKET'];
 
 // A bucket is a container for objects (files).
