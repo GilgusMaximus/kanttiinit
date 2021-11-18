@@ -2,12 +2,12 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 import { AccountCircle } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { logout } from './Firebase';
 import UserAuthForm from './UserAuthForm';
+import { fontSize } from '@mui/system';
 
 
 export interface SimpleDialogProps {
@@ -56,7 +56,20 @@ function ProfileView(props: SimpleDialogProps) {
 }
 
 export default function ProfileViewDemo() {
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [loggedIn, setLoggedIn] = React.useState(false);
+    
+    const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        setLoggedIn(true);
+        // ...
+    } else {
+        // User is signed out
+        setLoggedIn(false);
+    }
+});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,7 +81,10 @@ export default function ProfileViewDemo() {
 
   return (
     <div>
-      <br />
+      <span style={{fontSize: 'small'}}>
+          {!loggedIn && '(Logged Out)'}
+          {loggedIn && '(Logged In)'}
+      </span>
       <Button color="inherit" onClick={handleClickOpen}>
                 <AccountCircle/>
             </Button>

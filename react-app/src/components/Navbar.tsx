@@ -48,18 +48,18 @@ class Bar extends React.Component<
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <div id="date-buttons">
-                            {this.state.currentDates.map((x) => (
-                                <Button
-                                    className="date-button"
-                                    id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
-                                    variant="contained"
-                                    onClick={() => {this.handleSelectMealsDay(x);}}
-                                >
-                                    {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
-                                </Button>
-                            ))}
-                        </div>
+                            <div id="date-buttons">
+                                {this.state.currentDates.map((x) => (
+                                    <Button
+                                        className="date-button"
+                                        id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
+                                        variant="contained"
+                                        onClick={() => {this.handleSelectMealsDay(x);}}
+                                    >
+                                        {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
+                                    </Button>
+                                ))}
+                            </div>
                         <ProfileViewDemo></ProfileViewDemo>
                     </Toolbar>
                 </AppBar>
