@@ -12,6 +12,32 @@ import { CssBaseline, Drawer, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Requests from "./Requests";
+// Import the functions you need from the SDKs you need
+
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import RegisterForm from './components/RegisterForm';
+
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDG2vqhbjieTZ_1GkVvfxeW6VPb1gw9644",
+  authDomain: "kanttiinit-60c47.firebaseapp.com",
+  projectId: "kanttiinit-60c47",
+  messagingSenderId: "874462591966",
+  appId: "1:874462591966:web:ac5d49951225519e577b4f",
+  measurementId: "G-6ZMVBTJDCB"
+
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth();
 
 
 const theme = createTheme({
@@ -87,6 +113,10 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
         this.setState(prevState);
     }
 
+    callbackFun = (text?: string) => {
+      console.log("JA MOOOOOOOOOOOIN", text);
+    }
+
     render() {
         return (
             <ThemeProvider theme={theme}>
@@ -102,6 +132,7 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
                         <Restaurants
                           restaurants={this.state.restaurantList}
                           onSelectRestaurant={this.handleSideBarState}/>
+                          <RegisterForm callbackFun={this.callbackFun}></RegisterForm>
                     </Main>
                     
                     <RestaurantDrawer
