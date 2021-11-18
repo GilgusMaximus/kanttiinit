@@ -5,9 +5,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { styled, useTheme } from "@mui/material/styles";
+import ProfileViewDemo from './SimpleDialog';
 
 const NDAYS = 7;
 
@@ -15,9 +15,9 @@ type onSelectMealsDateType = (day: Date) => void;
 
 class Bar extends React.Component<
     { onSelectMealsDate: onSelectMealsDateType },
-    { currentDates: Date[] }> {
+    { currentDates: Date[], showUserUi: boolean }> {
 
-    state = { currentDates: [new Date()] };
+    state = { currentDates: [new Date()], showUserUi: false };
 
     componentDidMount() {
         let currentDatesArray = []
@@ -48,21 +48,19 @@ class Bar extends React.Component<
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <div id="date-buttons">
-                            {this.state.currentDates.map((x) => (
-                                <Button
-                                    className="date-button"
-                                    id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
-                                    variant="contained"
-                                    onClick={() => {this.handleSelectMealsDay(x);}}
-                                >
-                                    {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
-                                </Button>
-                            ))}
-                        </div>
-                        <Button color="inherit">
-                            <AccountCircle/>
-                        </Button>
+                            <div id="date-buttons">
+                                {this.state.currentDates.map((x) => (
+                                    <Button
+                                        className="date-button"
+                                        id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
+                                        variant="contained"
+                                        onClick={() => {this.handleSelectMealsDay(x);}}
+                                    >
+                                        {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
+                                    </Button>
+                                ))}
+                            </div>
+                        <ProfileViewDemo></ProfileViewDemo>
                     </Toolbar>
                 </AppBar>
             </Box>
