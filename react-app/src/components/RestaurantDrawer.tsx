@@ -50,7 +50,7 @@ class RestaurantDrawer extends React.Component<{
                     restaurant={this.props.restaurant} 
                 />
 
-                <ImageUpload foodId={'Vegaani'} restaurant={this.props.restaurant}></ImageUpload>
+                <ImageUpload restaurant={this.props.restaurant}></ImageUpload>
 
             </Drawer>
         );

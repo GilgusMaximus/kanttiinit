@@ -1,6 +1,8 @@
 
 import * as React from 'react';
 import { Component, SyntheticEvent} from 'react';
+import { Restaurant as RestaurantModel} from '../models/Restaurant';
+
 import Button from '@mui/material/Button';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
@@ -8,25 +10,27 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { Restaurant as RestaurantModel} from '../models/Restaurant';
+import MenuItem from '@mui/material/MenuItem';
+import { TextField } from '@mui/material';
 
 const axios = require('axios');
 
-const uploadStatusDisplayTimeInSeconds = 4;
-class ImageUpload extends React.Component<{foodId: string, restaurant: RestaurantModel}, { imageFile: any, successfulUpload: number}>{
+const uploadStatusDisplayTimeInSeconds = 3;
+class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { imageFile: any, successfulUpload: number, selectedMeal: number}>{
     // needed to make a reference to the file input button
     fileInput = React.createRef<HTMLInputElement>();
     fileSubmisson = React.createRef<HTMLInputElement>();
 
     constructor(props: any) {
         super(props);
-        this.state = {imageFile: '', successfulUpload: 0};
+        this.state = {imageFile: '', successfulUpload: 0, selectedMeal: -1};
 
         // allows us to handle what happens on change and submit
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputFileChange = this.handleInputFileChange.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.handleSubmitButtonClick = this.handleSubmitButtonClick.bind(this);
+        this.handleMealSelection = this.handleMealSelection.bind(this);
     }
 
     handleButtonClick(event: any) {
@@ -52,13 +56,16 @@ class ImageUpload extends React.Component<{foodId: string, restaurant: Restauran
             alert("Image file type not correct. Only png and jpg files are supported at the moment !");
             return;
         }
-        console.log(event.target.files[0]);
         this.setState({imageFile: event.target.files[0]});
+    }
+
+    handleMealSelection(event: any) {
+        this.setState({selectedMeal: Number(event.target.value)})
     }
 
     handleSubmit(event: any) {
         event.preventDefault();
-        if(this.state.imageFile === '') {
+        if(this.state.imageFile === '' || this.state.selectedMeal < 0 ||this.state.selectedMeal > this.props.restaurant.meals.length) {
             return;
         }
         const formData = new FormData();
@@ -67,10 +74,9 @@ class ImageUpload extends React.Component<{foodId: string, restaurant: Restauran
         const requestOptions = {
             headers: { 'Content-Type': 'multipart/form-data' }
         };
-        axios.post(`restaurants/${this.props.restaurant.id}/meals/${this.props.foodId}/image/`, formData, requestOptions)
+        axios.post(`restaurants/${this.props.restaurant.id}/meals/${this.props.restaurant.meals[this.state.selectedMeal].name}/image/`, formData, requestOptions)
         .then((response: any) => 
             {
-                console.log(response)
                 if(response.status === 200) {
                     // Upload succeeded
                     this.setState({imageFile: '', successfulUpload: 1});
@@ -89,14 +95,14 @@ class ImageUpload extends React.Component<{foodId: string, restaurant: Restauran
                 this.setState({ successfulUpload: 0});
             }, 1000 * uploadStatusDisplayTimeInSeconds);
         })
-        console.log("Ran submitting");
     }
 
     render() { 
         return (
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} style={{paddingBottom: 50}}>
                     <Stack direction="column" spacing={1} alignItems="center"justifyContent="center">
-                    {(this.state.successfulUpload === 1) && <Chip
+                    {/* ---------------Success or Failure Display--------------- */}
+                        {(this.state.successfulUpload === 1) && <Chip
                         icon={<CheckCircleOutlineIcon sx={{fill: '#1df051'}} />} 
                         label="Upload Successful" 
                         variant="outlined"
@@ -118,7 +124,19 @@ class ImageUpload extends React.Component<{foodId: string, restaurant: Restauran
                             borderWidth: 3,
                             fontSize: 15
                         }}></Chip>}
-                        <Chip label={this.state.imageFile.name || 'No image selected'}></Chip>
+                        
+                    {/* ---------------Success or Failure Display End--------------- */}
+                        <Grid container spacing={2} alignItems="center"justifyContent="center">
+                            <Grid item xs={'auto'}>
+                                <Chip label={this.state.imageFile.name || 'No image selected'}></Chip>
+                            </Grid>
+                            <Grid item xs={'auto'}>
+                                {/* TODO minWidth not so nice here  */}
+                                <TextField select fullWidth label="Select meal for image" onChange={this.handleMealSelection} sx={{color:'red', minWidth: 200}}>
+                                    {this.props.restaurant.meals.map((meal, index) => <MenuItem value={index}>{meal.name}</MenuItem>)}
+                                </TextField>
+                            </Grid>
+                        </Grid>
                         <Grid container spacing={2} alignItems="center"justifyContent="center">
                             <Grid item xs={'auto'}>
                                 <label>
@@ -142,7 +160,6 @@ class ImageUpload extends React.Component<{foodId: string, restaurant: Restauran
                         
                     </Stack>
                 </form>
-            
         );
     }
 }
