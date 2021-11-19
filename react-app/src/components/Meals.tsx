@@ -10,6 +10,7 @@ class Meals extends React.Component<{ restaurant: RestaurantModel }> {
             <Grid container item spacing={2} 
                 direction="row"
                 alignItems="flex-start"
+                wrap="nowrap"
             >
                 <Grid item xs={1}> 
                     {/* Just padding */
@@ -18,7 +19,7 @@ class Meals extends React.Component<{ restaurant: RestaurantModel }> {
                 </Grid>
 
                 {this.props.restaurant.meals.map((m, index) => (
-                    <Grid item> 
+                    <Grid item zeroMinWidth> 
                         <Meal key={index} meal={m}/>
                     </Grid>
                 ))}

@@ -8,8 +8,7 @@ export class Restaurant {
     location: Coordinates = {latitude: 0, longitude: 0};
     pricing: number | null = null;
     url: string | null = null;
-    meals: Map<String, Meal[]> = new Map<String, []>()
-    mealList: Meal[] = [];
+    meals: Meal[] = [];
 
     constructor(jsonObj?: Restaurant) {
         if (jsonObj) {
@@ -22,13 +21,10 @@ export class Restaurant {
             this.pricing = jsonObj.pricing;
             this.url = jsonObj.url;
 
-            if (jsonObj.meals) {
-                console.log(jsonObj.meals)
-                jsonObj.meals.forEach((meals, name) => {
-                    this.meals.set(name, meals)
-                    meals.forEach(m => this.mealList.push(m))
-                })
-            }
+            if (jsonObj.meals)
+                this.meals = jsonObj.meals.map(
+                    (meal: Meal) => new Meal(meal)
+                );
         }
     }
 }

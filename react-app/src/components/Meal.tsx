@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Meal as MealModel} from '../models/Meal'
 
 class Meal extends React.Component<{ meal: MealModel }> {
@@ -7,11 +7,18 @@ class Meal extends React.Component<{ meal: MealModel }> {
         return (
             <Grid container item spacing={2} direction="column">
                 <Grid item>
-                    Lunch 1:
+                    <Typography>
+                        {this.props.meal.category}
+                    </Typography>
                 </Grid>
-                <Grid item>
-                    &ensp;{this.props.meal.name}
-                </Grid>
+                
+                {this.props.meal.dishes.map((dish, index) =>
+                    <Grid item  ml={4}>
+                        <Typography>
+                            {dish.name}
+                        </Typography>
+                    </Grid>
+                )}
             </Grid>
         );
     }

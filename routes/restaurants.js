@@ -26,7 +26,13 @@ router.get("/", function (req, res, next) {
                 }
             }
             console.log(categories)
-            restaurant.meals = categories
+            mealsResponse = []
+            let i = 0
+            for (let category in categories) {
+                mealsResponse.push({'category': category, 'dishes': categories[category]})
+            }
+            // console.log(mealsResponse)
+            restaurant.meals = mealsResponse
         }
         res.send(response)
     });
