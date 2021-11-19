@@ -52,13 +52,14 @@ function mapDataToStandard(restaurantData, language) {
             const mealSplit = mealElement.split('/')
             if(mealSplit.length === 1) {
                 const dietSplit = (mealSplit.length > 1) ? mealSplit[1].split(' ' ) : mealSplit[0].split(' ')
+                const missingEndingFixer = (dietSplit[dietSplit.length-1].slice(-1) === ',') ? 1 : 0
                 dayMeals.menu.push(
                     {
                         Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length).join(' '),
                         Price: "",
                         Meals: [
                             {
-                                Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length).join(' '),
+                                Name: dietSplit.splice(0, dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length + missingEndingFixer).join(' '),
                                 Diets: [dietSplit.splice(dietSplit.length-1-(mealSplit[0].match(/,/g) || []).length)]
                             }
                         ]
@@ -67,7 +68,8 @@ function mapDataToStandard(restaurantData, language) {
                 return
             }
             const dietSplit = (mealSplit.length > 1) ? mealSplit[1].split(' ' ) : mealSplit[0].split(' ')
-            const name = (language === 'fi') ? mealSplit[0].split(' ') : dietSplit.splice(0, dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length)
+            const missingEndingFixer = (dietSplit[dietSplit.length-1].slice(-1) === ',') ? 1 : 0 
+            const name = (language === 'fi') ? mealSplit[0].split(' ') : dietSplit.splice(0, dietSplit.length-1-(mealSplit[1].match(/,/g) || []).length + missingEndingFixer)
             dayMeals.menu.push(
                 {
                     Name: name.join(' '),
