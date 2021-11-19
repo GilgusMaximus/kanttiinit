@@ -28,7 +28,6 @@ const getAllRestaurantsAndMeals = async (date) => {
         rests.forEach(x => x["meals"] = [])
         if (date) {
             return await getWeeklyMealsDate(date).then(meals => {
-                console.log(meals.length)
                 let obj = {}
                 meals.forEach(meal => {
                     if (meal.restaurant in obj) {
@@ -41,6 +40,7 @@ const getAllRestaurantsAndMeals = async (date) => {
                 return rests
             })
         } else {
+            // use today as date if no argument was given
             return await getWeeklyMealsDate(dateFormat(new Date())).then(meals => {
                 let obj = {}
                 meals.forEach(meal => {
@@ -163,7 +163,7 @@ const getMealExisting = async (restaurant, mealName) => {
 }
 
 
-const copyMealWeekly = async (mealEntity, date) => {
+const copyMealWeekly = async (mealEntity, date, category) => {
     const key = datastore.key(mealWeeklyKind)
     const meal = {
         'name': mealEntity.name,
@@ -171,6 +171,7 @@ const copyMealWeekly = async (mealEntity, date) => {
         'allergies': mealEntity.allergies,
         'rating': mealEntity.rating,
         'url': mealEntity.url,
+        'category': category,
         'date': date,
     }
 
@@ -231,6 +232,12 @@ const createMeal = async (restaurant, mealName, allergies) => {
     }
 
     const key = datastore.key(mealArchiveKind);
+
+    if(allergies.length > 0) { // fix allergies bug
+        if(Array.isArray(allergies[0])) {
+            allergies = allergies[0]
+        }
+    }
     const meal = {
         'name': mealName,
         'restaurant': restaurant,
@@ -239,6 +246,7 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'url': [],
     }
 
+    // console.log("Adding new meal: ", mealName)
     console.log("Adding new meal: ", mealName)
 
     return datastore.insert({key: key, data: meal}).then(async m => {

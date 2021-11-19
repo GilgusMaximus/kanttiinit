@@ -20,14 +20,16 @@ const uploadStatusDisplayTimeInSeconds = 3;
 
 const auth = getAuth();
 
-class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { imageFile: any, successfulUpload: number, selectedMeal: number, currentUser: User | null}>{
+type selectionType = { mealIdx: number, dishIdx: number };
+
+class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { imageFile: any, successfulUpload: number, selectedMeal: selectionType, currentUser: User | null}>{
     // needed to make a reference to the file input button
     fileInput = React.createRef<HTMLInputElement>();
     fileSubmisson = React.createRef<HTMLInputElement>();
 
     constructor(props: any) {
         super(props);
-        this.state = {imageFile: '', successfulUpload: 0, selectedMeal: -1, currentUser: null};
+        this.state = {imageFile: '', successfulUpload: 0, selectedMeal: {mealIdx: -1, dishIdx: -1}, currentUser: null};
 
         // allows us to handle what happens on change and submit
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,6 +53,21 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
         }
       });
     
+    index(mealIdx: number, dishIdx: number) {
+        let digits = (this.props.restaurant.meals.length).toString(10).length; 
+        return mealIdx*(10**digits) + dishIdx;
+    }
+
+    mealIdx(n: number) {
+        let digits = (this.props.restaurant.meals.length).toString(10).length; 
+        return Math.floor(n/(10**digits));
+    }
+
+    dishIdx(n: number) {
+        let digits = (this.props.restaurant.meals.length).toString(10).length; 
+        return n%(10**digits);
+    }
+
     handleButtonClick(event: any) {
         // used to circumvent the non available styling options of the browse button
         event.preventDefault();
@@ -78,12 +95,17 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
     }
 
     handleMealSelection(event: any) {
-        this.setState({selectedMeal: Number(event.target.value)})
+        let n = Number(event.target.value)
+        let mealIdx = this.mealIdx(n);
+        let dishIdx = this.dishIdx(n);
+        console.log(mealIdx, dishIdx);
+        this.setState({selectedMeal: { mealIdx: mealIdx, dishIdx: dishIdx}});
     }
 
     handleSubmit(event: any) {
         event.preventDefault();
-        if(this.state.imageFile === '' || this.state.selectedMeal < 0 ||this.state.selectedMeal > this.props.restaurant.meals.length) {
+        if(this.state.imageFile === '' || this.state.selectedMeal.mealIdx < 0 ||this.state.selectedMeal.mealIdx > this.props.restaurant.meals.length
+            || this.state.selectedMeal.dishIdx < 0 ||this.state.selectedMeal.dishIdx > this.props.restaurant.meals.length) {
             return;
         }
         const formData = new FormData();
@@ -94,7 +116,7 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                 const requestOptions = {
                     headers: { 'Content-Type': 'multipart/form-data', 'auth': 'Bearer '+ token }
                 };
-                axios.post(`restaurants/${this.props.restaurant.name}/meals/${this.props.restaurant.meals[this.state.selectedMeal].name}/image/`, formData, requestOptions)
+                axios.post(`restaurants/${this.props.restaurant.name}/meals/${this.props.restaurant.meals[this.state.selectedMeal.mealIdx].dishes[this.state.selectedMeal.dishIdx].name}/image/`, formData, requestOptions)
                 .then((response: any) => 
                     {
                         if(response.status === 200) {
@@ -121,6 +143,21 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
     }
 
     render() {
+        var mealItems = [];
+        for(let mealIdx=0; mealIdx < this.props.restaurant.meals.length; mealIdx++) {
+            let meal = this.props.restaurant.meals[mealIdx];
+            for(let dishesIdx=0; dishesIdx < meal.dishes.length; dishesIdx++) {
+                let dish = meal.dishes[dishesIdx];
+                mealItems.push(
+                    <MenuItem
+                        value={this.index(mealIdx, dishesIdx)}
+                    >
+                        {dish.name}
+                    </MenuItem>
+                );
+            }
+        }
+
         return (
             <span>
                 {this.state.currentUser && <form onSubmit={this.handleSubmit} style={{paddingBottom: 50}}>
@@ -157,7 +194,7 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
                             <Grid item xs={'auto'}>
                                 {/* TODO minWidth not so nice here  */}
                                 <TextField select fullWidth label="Select meal for image" onChange={this.handleMealSelection} sx={{color:'red', minWidth: 200}}>
-                                    {this.props.restaurant.meals.map((meal, index) => <MenuItem value={index}>{meal.name}</MenuItem>)}
+                                    {mealItems}
                                 </TextField>
                             </Grid>
                         </Grid>
