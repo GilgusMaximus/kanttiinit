@@ -271,14 +271,22 @@ const addMealRating = async (creator, restaurant, mealName, ratingNumber) => {
 
 
 //TODO: add to both meal kind and meal archive kind
-const addMealImage = async (restaurant, mealName, url, kind = mealArchiveKind) => {
-    const query = datastore.createQuery(kind);
+const addMealImage = async (restaurant, mealName, url, kind = mealWeeklyKind) => {
+    let query = datastore.createQuery(mealWeeklyKind);
     let [meals] = await datastore.runQuery(query);
-    let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase())
+    let meal = meals.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
     let key = meal[datastore.KEY]
     meal.url.push(url)
-
     await datastore.update({key: key, data: meal})
+
+
+    const query2 = datastore.createQuery(mealArchiveKind);
+    let [meals2] = await datastore.runQuery(query2);
+    let meal2 = meals2.find(x => x.name.toLowerCase() === mealName.toLowerCase() && x.restaurant.toLowerCase() === restaurant.toLowerCase())
+    let key2 = meal2[datastore.KEY]
+    meal2.url.push(url)
+    await datastore.update({key: key2, data: meal2})
+
     return url
 }
 
