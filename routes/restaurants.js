@@ -12,6 +12,13 @@ router.get("/", function (req, res, next) {
     db.getAllRestaurantsAndMeals(req.query["day"]).then(response => {
         for (let j = 0; j < response.length; j++) {
             restaurant = response[j]
+
+            let avgRating = 0
+            for (let i = 0; i < restaurant.rating.length; i++) {
+                avgRating += parseFloat(restaurant.rating[i].rating) / restaurant.rating.length;
+            }
+            response[j].rating = avgRating
+
             categories = {}
             if (!restaurant.meals) {
                 console.log("continuing")

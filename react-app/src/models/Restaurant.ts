@@ -9,6 +9,7 @@ export class Restaurant {
     pricing: number | null = null;
     url: string | null = null;
     meals: Meal[] = [];
+    rating: number | null = null;
 
     constructor(jsonObj?: Restaurant) {
         if (jsonObj) {
@@ -20,6 +21,7 @@ export class Restaurant {
             }
             this.pricing = jsonObj.pricing;
             this.url = jsonObj.url;
+            this.rating = jsonObj.rating;
 
             if (jsonObj.meals)
                 this.meals = jsonObj.meals.map(
