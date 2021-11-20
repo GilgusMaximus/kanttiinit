@@ -81,7 +81,7 @@ export default function ProfileViewDemo() {
 
   return (
     <div>
-      <span style={{fontSize: 'small'}}>
+      <span style={{fontSize: 'small', paddingLeft: 20}}>
           {!loggedIn && '(Logged Out)'}
           {loggedIn && '(Logged In)'}
       </span>

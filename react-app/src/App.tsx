@@ -96,8 +96,13 @@ class App extends Component<{}, { sideBarState: boolean, openRestaurant: Restaur
 
     handleSideBarState = (sideBarState: boolean, openRestaurant: RestaurantModel) => {
         let prevState = {...this.state};
+        // allows the user to close the sidebar by also reclicking on the same restaurant
+        if(openRestaurant === prevState.openRestaurant && prevState.sideBarState) {
+          this.handleDrawerClose();
+          return;
+        }
         prevState.sideBarState = sideBarState;
-        prevState.openRestaurant = openRestaurant;        
+        prevState.openRestaurant = openRestaurant;   
         this.setState(prevState);
         console.log(prevState);
     }

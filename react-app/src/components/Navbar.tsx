@@ -15,9 +15,9 @@ type onSelectMealsDateType = (day: Date) => void;
 
 class Bar extends React.Component<
     { onSelectMealsDate: onSelectMealsDateType },
-    { currentDates: Date[], showUserUi: boolean }> {
+    { currentDates: Date[], showUserUi: boolean, selectedDate: number }> {
 
-    state = { currentDates: [new Date()], showUserUi: false };
+    state = { currentDates: [new Date()], showUserUi: false, selectedDate: 0 };
 
     componentDidMount() {
         let currentDatesArray = []
@@ -29,6 +29,7 @@ class Bar extends React.Component<
     }
 
     handleSelectMealsDay = (day: Date) => {
+        this.setState({selectedDate: this.state.currentDates.indexOf(day)})
         this.props.onSelectMealsDate(day);
     }
 
@@ -49,12 +50,13 @@ class Bar extends React.Component<
                             <MenuIcon/>
                         </IconButton>
                             <div id="date-buttons">
-                                {this.state.currentDates.map((x) => (
+                                {this.state.currentDates.map((x, index) => (
                                     <Button
                                         className="date-button"
                                         id={[x.getUTCDate(), x.getUTCMonth() + 1].join('-')}
                                         variant="contained"
                                         onClick={() => {this.handleSelectMealsDay(x);}}
+                                        sx={{bgcolor: (this.state.selectedDate == index) ? '#1769aa' : '#2196f3'}}
                                     >
                                         {(x.toLocaleDateString("en-EN", {weekday: 'long'}).substr(0, 2).toUpperCase()) + " " + ([x.getUTCDate(), x.getUTCMonth() + 1].join('-'))}
                                     </Button>
