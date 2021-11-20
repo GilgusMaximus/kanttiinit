@@ -4,12 +4,19 @@ import { Grid, Avatar } from '@mui/material';
 import { Restaurant as RestaurantModel} from '../models/Restaurant';
 
 class Meals extends React.Component<{ restaurant: RestaurantModel }> {
+     
     render() {
+        
         return (
             <Grid container item spacing={2} 
                 direction="row"
                 alignItems="flex-start"
-                wrap="nowrap"
+                sx={{
+                    flexWrap: 'nowrap',
+                    '@media(max-width: 680px)': {
+                        flexWrap: 'wrap',
+                      }
+                }}
             >
                 {(this.props.restaurant.meals.length > 0)
                  ? this.props.restaurant.meals.map((m, index) => {
@@ -25,4 +32,4 @@ class Meals extends React.Component<{ restaurant: RestaurantModel }> {
     }
 }
 
-export default Meals
+export default Meals;

@@ -21,9 +21,9 @@ class MealDrawer extends React.Component<{ meal: MealModel }> {
                             {dish.name} <em>{dish.getAllergies()}</em>
                         </Typography>
                         <Grid item>
-                            {dish.url[0] ? (<img src={dish.url[0]} style={{width: 200, margin: 10}}/>) : null}
-                            {dish.url[1] ? (<img src={dish.url[1]} style={{width: 200, margin: 10}}/>) : null}
-                            {dish.url[2] ? (<img src={dish.url[2]} style={{width: 200, margin: 10}}/>) : null}
+                            {dish.url[0] ? (<img src={dish.url[0]} style={{width: 100, margin: 10}}/>) : null}
+                            {dish.url[1] ? (<img src={dish.url[1]} style={{width: 100, margin: 10}}/>) : null}
+                            {dish.url[2] ? (<img src={dish.url[2]} style={{width: 100, margin: 10}}/>) : null}
                         </Grid>
 
                     </Grid>
