@@ -60,7 +60,7 @@ function mapDataToStandard(restaurantData, language) {
             const split = mealElement.split('(')
             const diets = (split.length === 2) ? split[1].substr(0, split[1].length - 1).split(',').map(element => element.trim()) : ""
             dayMeals.menu.push({
-                Name: split[0].substr(0, split[0].length - 1),
+                Name: (split[0].indexOf('A la Carte') !== -1) ? 'A la Carte' : `Lunch ${mealIndex + 1}`,
                 Price: (split[0].indexOf('A la Carte') !== -1) ? "5,35/8,50€" : "2,70/6,00€",
                 Meals: [{
                     Name: split[0].substr(0, split[0].length - 1),

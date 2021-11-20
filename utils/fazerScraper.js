@@ -22,11 +22,17 @@ async function getRestaurantData(name, language) {
     const weekMeals = htmlData.data.LunchMenus.map((element, index) => {
         // required to get the date into the JS native date format, which allows easier processing
 
-        return {
+        const data = {
             day: element["DayOfWeek"],
             date: createDateFromDotDate(element["Date"]),
             menu: element["SetMenus"]
         }
+        data.menu.forEach((menu, menuIndex) => {
+            if(menu.Name === null) {
+                menu.Name = `Lunch ${menuIndex + 1}`
+            }
+        })
+        return data;
     });
     return weekMeals;
 }
