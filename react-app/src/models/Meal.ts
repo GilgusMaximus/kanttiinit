@@ -1,7 +1,7 @@
 import { Dish } from "./Dish";
 
 export class Meal {
-    name: string = 'REMOVE';
+    name: string | null = null;
     category: string | null = null;
     dishes: Dish[] = [];
 

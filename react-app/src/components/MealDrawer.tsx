@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Grid, Typography } from "@mui/material";
-import { Meal as MealModel} from '../models/Meal'
+import {Grid, Typography} from "@mui/material";
+import {Meal as MealModel} from '../models/Meal'
 
 class MealDrawer extends React.Component<{ meal: MealModel }> {
     render() {
@@ -13,19 +13,19 @@ class MealDrawer extends React.Component<{ meal: MealModel }> {
                     </Typography>
                 </Grid>
                 <Grid item ml={4}>
-                    {this.props.meal.name} <em>{this.props.meal.getAllergies()}</em>
+                    {this.props.meal.name}
                 </Grid>
-                <Grid item>
-                    {this.props.meal.url[0] ? (<img src={this.props.meal.url[0]} style={{ width: 200, margin: 10 }} />) : null}
-                    {this.props.meal.url[1] ? (<img src={this.props.meal.url[0]} style={{ width: 200, margin: 10 }}/>) : null}
-                    {this.props.meal.url[2] ? (<img src={this.props.meal.url[0]} style={{ width: 200, margin: 10 }}/>) : null}
-                </Grid>
-                
                 {this.props.meal.dishes.map((dish, index) =>
-                    <Grid item  ml={4}>
+                    <Grid item ml={4}>
                         <Typography>
-                            {dish.name}
+                            {dish.name} <em>{dish.getAllergies()}</em>
                         </Typography>
+                        <Grid item>
+                            {dish.url[0] ? (<img src={dish.url[0]} style={{width: 200, margin: 10}}/>) : null}
+                            {dish.url[1] ? (<img src={dish.url[1]} style={{width: 200, margin: 10}}/>) : null}
+                            {dish.url[2] ? (<img src={dish.url[2]} style={{width: 200, margin: 10}}/>) : null}
+                        </Grid>
+
                     </Grid>
                 )}
             </Grid>
