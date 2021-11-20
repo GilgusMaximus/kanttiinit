@@ -1,4 +1,4 @@
-import { Restaurants } from './models/Restaurants'
+import {Restaurants} from './models/Restaurants'
 
 class Requests {
     static fetchUrl = async (url: string) => {
@@ -31,7 +31,7 @@ class Requests {
     }
 
     static async fetchRestaurantsByDate(date: Date): Promise<Restaurants> {
-        return this.fetchUrl('/restaurants?day='+[date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()].join('-'))
+        return this.fetchUrl('/restaurants?day=' + [date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()].join('-'))
             .then((response) => {
                 return new Restaurants(response);
             });
@@ -41,8 +41,8 @@ class Requests {
         return await Requests.fetchUrl(`/restaurants/${restaurant}/meals`)
     }
 
-    static fetchMealsDate = async(date: Date) => {
-        let dateString = `${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate}`
+    static fetchMealsDate = async (date: Date) => {
+        let dateString = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate}`
         return Requests.fetchUrlParam('/restaurants', "day", dateString)
             .then((response) => {
                 return response

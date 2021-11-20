@@ -14,4 +14,14 @@ function isUserTokenValid(token) {
     }
 }
 
-module.exports = isUserTokenValid;
+function getUID(token) {
+    return admin.auth().verifyIdToken(token).then((decodedToken) => {
+        return decodedToken.uid;
+    })
+}
+
+module.exports = {
+    isUserTokenValid,
+    getUID
+};
+

@@ -95,6 +95,7 @@ const getRestaurantRating = async (name) => {
 const addRestaurantRating = async (creator, rest, ratingNumber) => {
     // TODO: check that name wasn't already added
     if (ratingNumber < 1 || ratingNumber > 5) {
+        console.log("Rating needs to be between 1 and 5")
         return -1
     }
     const query = datastore.createQuery(restKind);
@@ -102,10 +103,11 @@ const addRestaurantRating = async (creator, rest, ratingNumber) => {
     let rat = ratings.find(x => x.name.toLowerCase() === rest.toLowerCase())
     let key = rat[datastore.KEY]
 
-    // let find = rat.rating.find(x => x.creatorId === creator)
-    // if (find) { // user already added rating
-    //     return -2
-    // }
+    let find = rat.rating.find(x => x.creatorId === creator)
+    if (find) { // user already added rating
+        console.log("User already added a rating")
+        return -2
+    }
 
     rat.rating.push(
         {
