@@ -159,7 +159,7 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
         }
 
         return (
-            <span>
+            <span style={{justifyContent: (!this.state.currentUser) ? 'center' : 'unset', display: (!this.state.currentUser) ? 'grid' : 'default'}}>
                 {this.state.currentUser && <form onSubmit={this.handleSubmit} style={{paddingBottom: 50}}>
                     <Stack direction="column" spacing={1} alignItems="center"justifyContent="center">
                     {/* ---------------Success or Failure Display--------------- */}
