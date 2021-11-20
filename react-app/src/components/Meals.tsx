@@ -12,12 +12,6 @@ class Meals extends React.Component<{ restaurant: RestaurantModel }> {
                 alignItems="flex-start"
                 wrap="nowrap"
             >
-                <Grid item xs={1}> 
-                    {/* Just padding */
-                    <Avatar src={logo} sx={{ width: 0.9, height: 0.9}}></Avatar>
-                    }
-                </Grid>
-
                 {this.props.restaurant.meals.map((m, index) => (
                     <Grid item zeroMinWidth> 
                         <Meal key={index} meal={m}/>
