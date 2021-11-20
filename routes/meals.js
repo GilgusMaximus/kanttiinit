@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var db = require('../db/datastore')
 var storage = require('../db/storage')
-var isTokenValid = require('../utils/firebaseAuth')
+var fb = require('../utils/firebaseAuth')
 router.use(errorHandler)
 
 
@@ -53,7 +53,7 @@ router.post("/:meal/review/", function (req, res, next) {
 router.post("/:meal/image/", storage.multer.single('file'), function (req, res, next) {
     const token = req.headers.auth.split(' ')[1]
     try {
-        if(isTokenValid(token)) {
+        if(fb.isTokenValid(token)) {
             storage.uploadImage(req, res, next)
         } else {
             res.status(403)
@@ -64,7 +64,7 @@ router.post("/:meal/image/", storage.multer.single('file'), function (req, res, 
         res.status(500)
         res.send("Internal server error")
     }
-    
+
 });
 
 

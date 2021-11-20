@@ -13,6 +13,7 @@ import dipoli from '../images/dipoli.jpg';
 import kvarkki from '../images/kvarkki.jpg';
 import maukas from '../images/maukas.jpg';
 import taffa from '../images/taffa.jpg';
+
 import tieto from '../images/tieto.jpg';
 import tuas from '../images/tuas.jpg';
 import valimo from '../images/valimo.jpg';
@@ -35,12 +36,12 @@ const restaurantMapping: {} = {
 class Restaurant extends React.Component<
     { restaurant: RestaurantModel, onSelectRestaurant: onSelectRestaurantType },
     {}> {
-    
+
     handleRestaurantSelection = () => {
         this.props.onSelectRestaurant(true, this.props.restaurant);
     }
 
-    render() {    
+    render() {
         return (
             <Card elevation={4} sx={{ bgcolor: '#DFDFDF', borderRadius: 4, color: '#143642', minHeight: 200}}>
                 <CardActionArea onClick={this.handleRestaurantSelection} sx={{minHeight: 200}}>
@@ -54,7 +55,7 @@ class Restaurant extends React.Component<
                             </Grid>
                             <Grid item>
                                 <Stack direction="column" spacing={2}>
-                                    <Grid container direction="row" spacing={3}> 
+                                    <Grid container direction="row" spacing={3}>
                                         <Grid item>
                                         <ChevronRightIcon fontSize="inherit" />
                                         <span style={{fontSize: 'large'}}>
@@ -62,14 +63,14 @@ class Restaurant extends React.Component<
                                         </span>
                                         </Grid>
                                         <Grid item>
-                                        <Rating 
+                                        <Rating
                                             restaurant={this.props.restaurant}
-                                            allowSubmission={false} 
+                                            allowSubmission={false}
                                             color='#143642'
-                                        />  
+                                        />
                                         </Grid>
                                         <Grid item>
-                                        <Divider 
+                                        <Divider
                                         sx={{
                                             background: '#143642',
                                             border: `1px solid #143642`,

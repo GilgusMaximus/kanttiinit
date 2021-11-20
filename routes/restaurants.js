@@ -32,13 +32,11 @@ router.get("/", function (req, res, next) {
                     categories[meal.category] = [meal]
                 }
             }
-            console.log(categories)
             mealsResponse = []
             let i = 0
             for (let category in categories) {
                 mealsResponse.push({'category': category, 'dishes': categories[category]})
             }
-            // console.log(mealsResponse)
             restaurant.meals = mealsResponse
         }
         res.send(response)
@@ -59,6 +57,7 @@ router.use('/:name/meals/', function (req, res, next) {
 
 router.use('/:name/ratings/', function (req, res, next) {
     req.restaurant = req.params.name;
+    req.token = req.headers.auth.split(' ')[1]
     next();
 }, rratingRouter);
 

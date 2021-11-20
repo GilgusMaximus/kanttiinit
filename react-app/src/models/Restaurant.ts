@@ -4,12 +4,12 @@ type Coordinates = { latitude: number, longitude: number };
 
 export class Restaurant {
     id: string | null = null;
-    name: string | null = null;
+    name: string = "";
     location: Coordinates = {latitude: 0, longitude: 0};
     pricing: number | null = null;
     url: string | null = null;
     meals: Meal[] = [];
-    rating: number | null = null;
+    rating: number = 0;
 
     constructor(jsonObj?: Restaurant) {
         if (jsonObj) {
