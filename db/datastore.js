@@ -13,7 +13,7 @@ const restKind = 'restaurants'
 const getAllRestaurants = async () => {
     const query = datastore.createQuery(restKind);
     const [rests] = await datastore.runQuery(query);
-    const newRests = rests.map(restaurant => ({ ...restaurant, id: restaurant[datastore.KEY].name}))
+    const newRests = rests.map(restaurant => ({...restaurant, id: restaurant[datastore.KEY].name}))
     return newRests
 }
 
@@ -28,7 +28,6 @@ const getAllRestaurantsAndMeals = async (date) => {
         rests.forEach(x => x["meals"] = [])
         if (date) {
             return await getWeeklyMealsDate(date).then(meals => {
-                console.log(meals.length)
                 let obj = {}
                 meals.forEach(meal => {
                     if (meal.restaurant in obj) {
@@ -41,6 +40,7 @@ const getAllRestaurantsAndMeals = async (date) => {
                 return rests
             })
         } else {
+            // use today as date if no argument was given
             return await getWeeklyMealsDate(dateFormat(new Date())).then(meals => {
                 let obj = {}
                 meals.forEach(meal => {
@@ -77,6 +77,18 @@ const getRestaurantAndMeals = async (name, date) => {
 const getRestaurantRatings = async (name) => {
     return await getRestaurant(name).then(rest => {
         return rest.rating
+
+    })
+}
+
+const getRestaurantRating = async (name) => {
+    return await getRestaurantRatings(name).then(response => {
+        let avgRating = 0
+        let length = response.length;
+        for(let i = 0; i < length; i++) {
+            avgRating += parseFloat(response[i].rating/length)
+        }
+        return avgRating
     })
 }
 
@@ -89,6 +101,12 @@ const addRestaurantRating = async (creator, rest, ratingNumber) => {
     let [ratings] = await datastore.runQuery(query);
     let rat = ratings.find(x => x.name.toLowerCase() === rest.toLowerCase())
     let key = rat[datastore.KEY]
+
+    // let find = rat.rating.find(x => x.creatorId === creator)
+    // if (find) { // user already added rating
+    //     return -2
+    // }
+
     rat.rating.push(
         {
             "rating": ratingNumber,
@@ -163,7 +181,7 @@ const getMealExisting = async (restaurant, mealName) => {
 }
 
 
-const copyMealWeekly = async (mealEntity, date) => {
+const copyMealWeekly = async (mealEntity, date, category) => {
     const key = datastore.key(mealWeeklyKind)
     const meal = {
         'name': mealEntity.name,
@@ -171,6 +189,7 @@ const copyMealWeekly = async (mealEntity, date) => {
         'allergies': mealEntity.allergies,
         'rating': mealEntity.rating,
         'url': mealEntity.url,
+        'category': category,
         'date': date,
     }
 
@@ -231,6 +250,12 @@ const createMeal = async (restaurant, mealName, allergies) => {
     }
 
     const key = datastore.key(mealArchiveKind);
+
+    if (allergies.length > 0) { // fix allergies bug
+        if (Array.isArray(allergies[0])) {
+            allergies = allergies[0]
+        }
+    }
     const meal = {
         'name': mealName,
         'restaurant': restaurant,
@@ -239,6 +264,7 @@ const createMeal = async (restaurant, mealName, allergies) => {
         'url': [],
     }
 
+    // console.log("Adding new meal: ", mealName)
     console.log("Adding new meal: ", mealName)
 
     return datastore.insert({key: key, data: meal}).then(async m => {
@@ -310,4 +336,5 @@ module.exports = {
     getAllRestaurantsAndMeals,
     getWeeklyMealsDate,
     getWeeklyMealsDateRestaurant,
+    getRestaurantRating,
 }

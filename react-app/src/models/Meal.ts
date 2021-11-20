@@ -1,28 +1,16 @@
+import { Dish } from "./Dish";
+
 export class Meal {
-    name: string | null = null;
-    allergies: string[] | null = null;
-    url: string[] = []
+    name: string = 'REMOVE';
+    category: string | null = null;
+    dishes: Dish[] = [];
 
     constructor(jsonObj?: Meal) {
         if (jsonObj) {
-            this.name = jsonObj.name;
-            this.allergies = jsonObj.allergies;
-            this.url = jsonObj.url;
+            this.category = jsonObj.category;
+            this.dishes = jsonObj.dishes.map(
+                (dish: Dish) => new Dish(dish)
+              );
         }
-    }
-
-    getAllergies() {
-        let str: string = ""
-        if (this.allergies) {
-            str = " - "
-            this.allergies.forEach((a, i) => {
-                str += a
-                // @ts-ignore
-                if (i != this.allergies.length - 1) {
-                    str += ", "
-                }
-            })
-        }
-        return str;
     }
 }

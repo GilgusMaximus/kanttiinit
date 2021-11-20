@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var db = require('../db/datastore')
 var storage = require('../db/storage')
-
+var isTokenValid = require('../utils/firebaseAuth')
 router.use(errorHandler)
 
 
@@ -51,7 +51,20 @@ router.post("/:meal/review/", function (req, res, next) {
 
 /* Upload image to cloud */
 router.post("/:meal/image/", storage.multer.single('file'), function (req, res, next) {
-    storage.uploadImage(req, res, next)
+    const token = req.headers.auth.split(' ')[1]
+    try {
+        if(isTokenValid(token)) {
+            storage.uploadImage(req, res, next)
+        } else {
+            res.status(403)
+            res.send("Access not allowed, invalid token")
+        }
+    } catch(error){
+        console.log(error)
+        res.status(500)
+        res.send("Internal server error")
+    }
+    
 });
 
 

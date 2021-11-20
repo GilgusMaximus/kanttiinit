@@ -10,6 +10,30 @@ const db = require('../db/datastore');
 /* GET all restaurants and res meals */
 router.get("/", function (req, res, next) {
     db.getAllRestaurantsAndMeals(req.query["day"]).then(response => {
+        for (let j = 0; j < response.length; j++) {
+            restaurant = response[j]
+            categories = {}
+            if (!restaurant.meals) {
+                console.log("continuing")
+                continue;
+            }
+            for (let i = 0; i < restaurant.meals.length || 0; i++) {
+                let meal = restaurant.meals[i]
+                if (meal.category in categories) {
+                    categories[meal.category].push(meal)
+                } else {
+                    categories[meal.category] = [meal]
+                }
+            }
+            console.log(categories)
+            mealsResponse = []
+            let i = 0
+            for (let category in categories) {
+                mealsResponse.push({'category': category, 'dishes': categories[category]})
+            }
+            // console.log(mealsResponse)
+            restaurant.meals = mealsResponse
+        }
         res.send(response)
     });
 });

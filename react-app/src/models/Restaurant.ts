@@ -1,6 +1,6 @@
-import { Meal } from './Meal';
+import {Meal} from './Meal';
 
-type Coordinates = {latitude: number, longitude: number};
+type Coordinates = { latitude: number, longitude: number };
 
 export class Restaurant {
     id: string | null = null;
@@ -9,23 +9,22 @@ export class Restaurant {
     pricing: number | null = null;
     url: string | null = null;
     meals: Meal[] = [];
-  
-    constructor(jsonObj?: Restaurant) {
-      if (jsonObj) {
-        this.id = jsonObj.id;
-        this.name = jsonObj.name;
-        if (jsonObj.location!) {
-          this.location.latitude = jsonObj.location.latitude;
-          this.location.longitude = jsonObj.location.longitude;
-        }
-        this.pricing = jsonObj.pricing;
-        this.url = jsonObj.url;
 
-        if (jsonObj.meals)
-          this.meals = jsonObj.meals.map(
-            (meal: Meal) => new Meal(meal)
-          );
-      }
+    constructor(jsonObj?: Restaurant) {
+        if (jsonObj) {
+            this.id = jsonObj.id;
+            this.name = jsonObj.name;
+            if (jsonObj.location!) {
+                this.location.latitude = jsonObj.location.latitude;
+                this.location.longitude = jsonObj.location.longitude;
+            }
+            this.pricing = jsonObj.pricing;
+            this.url = jsonObj.url;
+
+            if (jsonObj.meals)
+                this.meals = jsonObj.meals.map(
+                    (meal: Meal) => new Meal(meal)
+                );
+        }
     }
-  }
-  
+}
