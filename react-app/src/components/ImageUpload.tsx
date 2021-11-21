@@ -221,7 +221,7 @@ class ImageUpload extends React.Component<{restaurant: RestaurantModel}, { image
 
                     </Stack>
                 </form>}
-                {!this.state.currentUser && <span style={{fontStyle: 'italic'}}>Please login in order to upload pictures</span>}
+                {!this.state.currentUser && <span style={{fontStyle: 'italic'}}>Please login in order to upload pictures & create restaurant ratings</span>}
             </span>
         );
     }

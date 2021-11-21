@@ -24,7 +24,7 @@ const restaurantMapping: {} = {
     "Arvo": arvo,
     "Alvari": alvari,
     "Kvarkki": kvarkki,
-    "Mau-Kas": maukas,
+    "Mau-kas": maukas,
     "Computer Science Building": tieto,
     "A Bloc": abloc,
     "Täffä": taffa,
