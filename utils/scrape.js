@@ -20,13 +20,13 @@ const datastore = require('../db/datastore')
  */
 
 scrapeAllData = async () => {
-    // await datastore.clearWeeklyMeals().then(async () => {
-    //     await console.log(" ---------- MEALS EMPTIED ------------- ")
-    // })
-    // createMaukasMeals()
-    // createTaffaMeals()
-    // createFazerMeals()
-    // createSodexoMeals()
+     await datastore.clearWeeklyMeals().then(async () => {
+         await console.log(" ---------- MEALS EMPTIED ------------- ")
+     })
+     createMaukasMeals()
+     createTaffaMeals()
+     createFazerMeals()
+     createSodexoMeals()
 }
 
 const createRestaurantMeals = (restaurantName, scrapeFunc) => {
